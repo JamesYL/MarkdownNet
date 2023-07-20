@@ -35,7 +35,8 @@
     "build": "rm -rf dist && tsc",
     "lint:spell": "cspell .",
     "lint:eslint": "eslint './src/**/*.ts'",
-    "lint": "npm run lint:spell && npm run lint:eslint"
+    "lint": "npm run lint:spell && npm run lint:eslint",
+    "prepare": "husky install"
   },
   "prettier": {
     "semi": true,
