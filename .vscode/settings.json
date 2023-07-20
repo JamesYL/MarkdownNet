@@ -1,0 +1,4 @@
+{
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "explorer.excludeGitIgnore": true
+}

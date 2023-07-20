@@ -1,0 +1,47 @@
+{
+  "name": "markdown-directory",
+  "version": "1.0.0",
+  "description": "Takes a nested directory of markdown files and outputs a single JSON representation of everything.",
+  "author": "JamesYL",
+  "license": "MIT",
+  "main": "index.js",
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.7",
+    "@commitlint/config-conventional": "^17.6.7",
+    "@types/chai": "^4.3.5",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^20.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "chai": "^4.3.7",
+    "cspell": "^6.31.2",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^8.0.3",
+    "mocha": "^10.2.0",
+    "prettier": "^3.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "dev": "ts-node ./src/index.ts",
+    "test": "mocha --require ts-node/register --recursive './src/**/*.test.ts'",
+    "build": "rm -rf dist && tsc",
+    "lint:spell": "cspell .",
+    "lint:eslint": "eslint './src/**/*.ts'",
+    "lint": "npm run lint:spell && npm run lint:eslint"
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": false,
+    "trailingComma": "all",
+    "printWidth": 80,
+    "tabWidth": 2
+  }
+}
