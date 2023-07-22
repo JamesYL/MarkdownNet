@@ -17,21 +17,37 @@ const verifyFieldValueConvention = (rawFieldValue: string): void => {
   if (fieldValue === "") throw new Error("Field value cannot be empty.");
 };
 
+type RequiredFrontMatter<MandatoryFields extends string> = {
+  [K in MandatoryFields]: string;
+};
+type OptionalFrontMatter<OptionalFields extends string> = Partial<
+  RequiredFrontMatter<OptionalFields>
+>;
+export type FrontMatter<
+  MandatoryFields extends string,
+  OptionalFields extends string,
+> = RequiredFrontMatter<MandatoryFields> & OptionalFrontMatter<OptionalFields>;
+
+export const frontMatterRegex = /^[\s\n]*---\n([\s\S]+?)\n---\n/;
+
 /**
  * @param content Raw markdown content (including front matter)
  * @param mandatoryFields Fields that must be present in the front matter - throws exception if not present
  */
-export const extractFrontMatter = <T extends Record<string, string>>(
+export const extractFrontMatter = <
+  MandatoryFields extends string,
+  OptionalFields extends string,
+>(
   rawContent: string,
-  mandatoryFields: Set<string> = new Set(),
-): T => {
+  mandatoryFields: Set<MandatoryFields>,
+): FrontMatter<MandatoryFields, OptionalFields> => {
   for (const mandatoryField of mandatoryFields)
-    verifyFieldNameConvention(mandatoryField);
+    verifyFieldNameConvention(mandatoryField as string);
 
-  const frontMatterRegex = /^[\s\n]*---\n([\s\S]+?)\n---\n/;
   const match = rawContent.match(frontMatterRegex);
   if (match === null) {
-    if (mandatoryFields.size === 0) return {} as T;
+    if (mandatoryFields.size === 0)
+      return {} as FrontMatter<MandatoryFields, OptionalFields>;
     throw new Error("Could not find front matter in content.");
   }
   const frontMatterString = match[1];
@@ -46,11 +62,12 @@ export const extractFrontMatter = <T extends Record<string, string>>(
     verifyFieldNameConvention(fieldName);
     verifyFieldValueConvention(fieldValue);
 
-    mandatoryFields.delete(fieldName);
+    mandatoryFields.delete(fieldName as MandatoryFields);
 
     fields[fieldName] = fieldValue;
   }
-  if (mandatoryFields.size === 0) return fields as T;
+  if (mandatoryFields.size === 0)
+    return fields as FrontMatter<MandatoryFields, OptionalFields>;
   throw new Error(
     `Missing mandatory fields in front matter: >>>${[...mandatoryFields].join(
       "<<<, >>>",

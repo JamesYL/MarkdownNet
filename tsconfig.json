@@ -19,6 +19,12 @@
       "node",
       "mocha"
     ],
+    "baseUrl": "src",
+    "paths": {
+      "@platform/*": [
+        "platform/*"
+      ]
+    }
   },
   "include": [
     "./src",

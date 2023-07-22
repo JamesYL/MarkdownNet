@@ -1,52 +1,48 @@
-import fs from "fs";
+import { extractFrontMatter, FrontMatter } from "./services/get_front_matter";
+import { getFileContentInDirectory } from "./services/get_file_content";
 import path from "path";
-import { logger } from "../../platform/logger";
+import { extractMarkdownContent } from "./services/get_markdown_content";
 
-export interface Content {
-  rawContent: string;
-  absoluteFilePath: string;
-  createdDate: Date;
-  updatedDate: Date;
-}
+export type MarkdownContentWithMetadata<
+  MandatoryFrontMatter extends string,
+  OptionalFrontMatter extends string,
+> = {
+  markdownContent: string;
+  frontMatter: FrontMatter<MandatoryFrontMatter, OptionalFrontMatter>;
+  fileLastModified: Date;
+  relativeFilePath: string;
+};
 
 /**
- * Will push to the results array all markdown content in the given directory.
+ * @param directory Directory containing markdown files
+ * @param mandatoryFields Fields that must be present in the front matter - throws exception if not present
  */
-export const getMarkdownContentInDirectory = (directory: string): Content[] => {
-  const results: Content[] = [];
-  getMarkdownContentInDirectoryInternal(directory, results);
-  return results;
-};
-export const getMarkdownContentInDirectoryInternal = (
+export const getMarkdownContentWithMetadata = <
+  MandatoryFrontMatter extends string,
+  OptionalFrontMatter extends string,
+>(
   directory: string,
-  results: Content[],
-): void => {
-  const files = fs.readdirSync(directory);
-  files.forEach((file) => {
-    const absoluteFilePath = path.join(directory, file);
-    if (fs.statSync(absoluteFilePath).isDirectory()) {
-      getMarkdownContentInDirectoryInternal(absoluteFilePath, results);
-      return;
-    }
-    const ext = path.extname(absoluteFilePath);
-    if (ext.toLowerCase() !== ".md") {
-      logger.error(
-        `Found non-markdown file in data directory: ${absoluteFilePath}`,
-      );
-      return;
-    }
-
-    const rawContent = fs.readFileSync(absoluteFilePath, "utf8");
-    const createdDate = fs.statSync(absoluteFilePath).birthtime;
-    const updatedDate = fs.statSync(absoluteFilePath).mtime;
-
-    results.push({
-      rawContent,
-      absoluteFilePath,
-      createdDate,
-      updatedDate,
-    });
+  mandatoryFields: Set<MandatoryFrontMatter>,
+): MarkdownContentWithMetadata<MandatoryFrontMatter, OptionalFrontMatter>[] => {
+  const entryDirectory = path.join(__dirname, directory);
+  const markdownContent = getFileContentInDirectory(entryDirectory);
+  return markdownContent.map((content) => {
+    const { fileContent, updatedDate, absoluteFilePath } = content;
+    const frontMatter = extractFrontMatter<
+      MandatoryFrontMatter,
+      OptionalFrontMatter
+    >(fileContent, mandatoryFields);
+    const markdownContent = extractMarkdownContent(fileContent);
+    const relativeFilePath = path.relative(entryDirectory, absoluteFilePath);
+    const markdownContentWithMetadata: MarkdownContentWithMetadata<
+      MandatoryFrontMatter,
+      OptionalFrontMatter
+    > = {
+      markdownContent,
+      frontMatter,
+      fileLastModified: updatedDate,
+      relativeFilePath,
+    };
+    return markdownContentWithMetadata;
   });
 };
-
-logger.info(getMarkdownContentInDirectory(path.join(__dirname, "../tmp")));
