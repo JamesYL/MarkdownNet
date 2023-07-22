@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { logger } from "./platform/logger";
+import { logger } from "../../platform/logger";
 
 export interface Content {
   content: string;

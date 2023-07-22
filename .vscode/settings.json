@@ -1,4 +1,7 @@
 {
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "explorer.excludeGitIgnore": true
+  "files.exclude": {
+    "node_modules": true,
+    "dist": true
+  }
 }
