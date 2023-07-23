@@ -22,12 +22,12 @@ describe("get_file_content", () => {
 
       result.forEach((content, i) => {
         const file = statSync(filePaths[i]);
-        expect(filePaths[i]).to.equal(content.absoluteFilePath);
+        expect(content.absoluteFilePath).to.equal(filePaths[i]);
         expect(content.fileContent).to.equal(fileData + i);
-        expect(file.birthtime.toString()).to.equal(
-          content.createdDate.toString(),
+        expect(content.createdDate.toString()).to.equal(
+          file.birthtime.toString(),
         );
-        expect(file.mtime.toString()).to.equal(content.updatedDate.toString());
+        expect(content.updatedDate.toString()).to.equal(file.mtime.toString());
       });
     });
   });
