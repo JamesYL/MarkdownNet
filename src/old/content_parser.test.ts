@@ -1,15 +1,3 @@
-import { expect } from "chai";
-import path from "path";
-import os from "os";
-import { parseContent, parseMarkdown } from "./content_parser";
-
-const entryDirectory = path.join(
-  os.homedir(),
-  "cshelp",
-  "transformer",
-  "webapp-docs",
-  "data",
-);
 describe("Content Parser", () => {
   describe("parseContent", () => {
     it("should return the input string for non-markdown files", () => {

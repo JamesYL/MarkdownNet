@@ -3,7 +3,6 @@
     "target": "es2022",
     "module": "commonjs",
     "outDir": "dist",
-    "rootDir": "src",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -19,19 +18,22 @@
       "node",
       "mocha"
     ],
-    "baseUrl": "src",
+    "baseUrl": "./",
     "paths": {
       "@platform/*": [
-        "platform/*"
+        "src/platform/*"
+      ],
+      "@engine/*": [
+        "src/engine/*"
       ]
     }
   },
   "include": [
     "./src",
-  ],
+    "./test"
+, "src/old"  ],
   "exclude": [
     "dist",
     "node_modules",
-    "**/*.test.ts"
   ]
 }

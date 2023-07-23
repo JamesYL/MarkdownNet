@@ -1,4 +1,4 @@
-import { extractFrontMatter, FrontMatter } from "./services/get_front_matter";
+import { getFrontMatter, FrontMatter } from "./services/get_front_matter";
 import { getFileContentInDirectory } from "./services/get_file_content";
 import path from "path";
 import { extractMarkdownContent } from "./services/get_markdown_content";
@@ -28,7 +28,7 @@ export const getMarkdownContentWithMetadata = <
   const markdownContent = getFileContentInDirectory(entryDirectory);
   return markdownContent.map((content) => {
     const { fileContent, updatedDate, absoluteFilePath } = content;
-    const frontMatter = extractFrontMatter<
+    const frontMatter = getFrontMatter<
       MandatoryFrontMatter,
       OptionalFrontMatter
     >(fileContent, mandatoryFields);

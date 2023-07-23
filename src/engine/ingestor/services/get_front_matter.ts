@@ -14,7 +14,6 @@ const verifyFieldValueConvention = (rawFieldValue: string): void => {
       "Field value must not have leading or trailing whitespace. " +
         `Field values: >>>${rawFieldValue}<<<`,
     );
-  if (fieldValue === "") throw new Error("Field value cannot be empty.");
 };
 
 type RequiredFrontMatter<MandatoryFields extends string> = {
@@ -28,13 +27,13 @@ export type FrontMatter<
   OptionalFields extends string,
 > = RequiredFrontMatter<MandatoryFields> & OptionalFrontMatter<OptionalFields>;
 
-export const frontMatterRegex = /^[\s\n]*---\n([\s\S]+?)\n---\n/;
+export const frontMatterRegex = /^[\s\n]*---\n([\s\S]+?)\n---\s*[\n|$]/;
 
 /**
  * @param content Raw markdown content (including front matter)
  * @param mandatoryFields Fields that must be present in the front matter - throws exception if not present
  */
-export const extractFrontMatter = <
+export const getFrontMatter = <
   MandatoryFields extends string,
   OptionalFields extends string,
 >(
@@ -50,24 +49,31 @@ export const extractFrontMatter = <
       return {} as FrontMatter<MandatoryFields, OptionalFields>;
     throw new Error("Could not find front matter in content.");
   }
+
   const frontMatterString = match[1];
 
   // Parse colon-separated fields
   const fields: Record<string, string> = {};
-  const fieldRegex = /^([\w\s]+):(.*)/gm;
-  let fieldMatch: RegExpExecArray | null = null;
-  while ((fieldMatch = fieldRegex.exec(frontMatterString)) !== null) {
-    const fieldName = fieldMatch[1];
-    const fieldValue = fieldMatch[2];
+  frontMatterString.split("\n").map((line) => {
+    const index = line.indexOf(":");
+    if (index === -1)
+      throw new Error(`Front matter line missing colon: >>>${line}<<<`);
+    const fieldName = line.slice(0, index);
+    const fieldValue = line.slice(index + 1);
+
     verifyFieldNameConvention(fieldName);
     verifyFieldValueConvention(fieldValue);
 
     mandatoryFields.delete(fieldName as MandatoryFields);
 
+    if (fieldName in fields) throw new Error("Duplicate field name");
+
     fields[fieldName] = fieldValue;
-  }
+  });
+
   if (mandatoryFields.size === 0)
     return fields as FrontMatter<MandatoryFields, OptionalFields>;
+
   throw new Error(
     `Missing mandatory fields in front matter: >>>${[...mandatoryFields].join(
       "<<<, >>>",
