@@ -46,4 +46,24 @@ describe("ingestor", () => {
       });
     });
   });
+
+  it("Throws if front matter is missing mdantory fields", () => {
+    createTmpDirectoryAndTest(async (tmpDir) => {
+      const rootFilePath = path.join(tmpDir, "root.md");
+      const fileData = [
+        "---",
+        "title:thing3\ndesc:desc1",
+        "---",
+        "# thing",
+      ].join("\n");
+      writeFileSync(rootFilePath, fileData);
+
+      expect(() =>
+        getMarkdownContentWithMetadata<"dog", "title" | "desc">(
+          tmpDir,
+          new Set(["dog"]),
+        ),
+      ).to.throw();
+    });
+  });
 });
