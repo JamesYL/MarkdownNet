@@ -24,12 +24,14 @@ describe("processor - validator", () => {
       "test.MD",
       "path/to/test.MD",
       "path/to/ABC.md",
+      "PATH/test.md",
+      "path-a/to/test.md",
       "\\",
       "test.12",
       "test.12.md",
     ];
-    badFilePaths.forEach(
-      (item) => expect(() => validateFilePaths([item], {})).to.throw,
+    badFilePaths.forEach((item) =>
+      expect(() => validateFilePaths([item], {})).to.throw(),
     );
     const goodFilePaths = ["test.md", "path/to/test.md", "test.lasdjfalksdjf"];
     goodFilePaths.forEach((item) =>

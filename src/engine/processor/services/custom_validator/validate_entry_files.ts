@@ -7,17 +7,6 @@ export const validateEntryFiles = (
   filePaths: string[],
   entryFileName: string,
 ): void => {
-  const nonLowerCaseFiles = filePaths.filter(
-    (item) => path.extname(item) !== path.extname(item).toLowerCase(),
-  );
-  if (nonLowerCaseFiles.length > 0) {
-    throw new Error(
-      `All file extensions must be lowercase: >>>${nonLowerCaseFiles.join(
-        ", ",
-      )}<<<`,
-    );
-  }
-
   const filePathsSet = new Set(filePaths);
   const directories = new Set(
     filePaths.flatMap((item) => {
