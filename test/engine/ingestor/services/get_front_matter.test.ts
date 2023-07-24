@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { getFrontMatter } from "@engine/ingestor/services/get_front_matter";
 
-describe("get_front_matter", () => {
+describe("ingestor - get_front_matter", () => {
   it("Standard front matter is extracted correctly", () => {
     const validValue =
       "abcdefghljklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-_+-=[]{}|;':\",./<>?~`\\/---";

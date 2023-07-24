@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { extractMarkdownContent } from "@engine/ingestor/services/get_markdown_content";
 
-describe("get_markdown_content", () => {
+describe("ingestor - get_markdown_content", () => {
   it("Markdown content with front matter removes front matter", () => {
     const markdown = extractMarkdownContent(
       `

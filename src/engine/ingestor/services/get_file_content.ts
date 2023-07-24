@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import { logger } from "@platform/logger";
 
 export interface Content {
   fileContent: string;
@@ -31,12 +30,7 @@ const getFileContentInDirectoryInternal = (
       return;
     }
     const ext = path.extname(absoluteFilePath);
-    if (ext.toLowerCase() !== ".md") {
-      logger.warn(
-        `Found non-markdown file in data directory: ${absoluteFilePath}`,
-      );
-      return;
-    }
+    if (ext.toLowerCase() !== ".md") return;
 
     const fileContent = fs.readFileSync(absoluteFilePath, "utf8");
     const createdDate = fs.statSync(absoluteFilePath).birthtime;
