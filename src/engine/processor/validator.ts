@@ -1,6 +1,6 @@
-import { ensureNoDuplicatePaths } from "./custom_validator/ensure_no_duplicate_paths";
-import { validateEntryFiles } from "./custom_validator/validate_entry_files";
-import { validateFilePathNames } from "./custom_validator/validate_file_path_names";
+import { ensureNoDuplicatePaths } from "./all_validators/ensure_no_duplicate_paths";
+import { validateEntryFiles } from "./all_validators/validate_entry_files";
+import { validateFilePathNames } from "./all_validators/validate_file_path_names";
 
 export interface ValidateFlags {
   /** If enabled, ensures each directory has a file with the name `entryFileName` */
