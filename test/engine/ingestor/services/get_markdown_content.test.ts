@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { extractMarkdownContent } from "@engine/ingestor/services/get_markdown_content";
+import { extractMarkdownContent } from "@engine/ingestor/get_markdown_content";
 
 describe("ingestor - get_markdown_content", () => {
   it("Markdown content with front matter removes front matter", () => {

@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { getFrontMatter } from "@engine/ingestor/services/get_front_matter";
+import { getFrontMatter } from "@engine/ingestor/get_front_matter";
 
 describe("ingestor - get_front_matter", () => {
   it("Standard front matter is extracted correctly", () => {

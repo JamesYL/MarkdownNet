@@ -1,4 +1,4 @@
-import { validateFilePaths } from "@engine/processor/services/validator";
+import { validateFilePaths } from "@engine/processor/validator";
 import { expect } from "chai";
 
 describe("processor - validator", () => {

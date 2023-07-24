@@ -1,7 +1,7 @@
-import { getFrontMatter, FrontMatter } from "./services/get_front_matter";
-import { getFileContentInDirectory } from "./services/get_file_content";
+import { getFrontMatter, FrontMatter } from "./ingestor/get_front_matter";
+import { getFileContentInDirectory } from "./ingestor/get_file_content";
 import path from "path";
-import { extractMarkdownContent } from "./services/get_markdown_content";
+import { extractMarkdownContent } from "./ingestor/get_markdown_content";
 
 export type MarkdownContentWithMetadata<
   MandatoryFrontMatter extends string,
@@ -24,9 +24,9 @@ export const getMarkdownContentWithMetadata = <
   directory: string,
   mandatoryFields: Set<MandatoryFrontMatter>,
 ): MarkdownContentWithMetadata<MandatoryFrontMatter, OptionalFrontMatter>[] => {
-  const entryDirectory = path.join(__dirname, directory);
+  const entryDirectory = path.resolve(__dirname, directory);
   const markdownContent = getFileContentInDirectory(entryDirectory);
-  return markdownContent.map((content) => {
+  const results = markdownContent.map((content) => {
     const { fileContent, updatedDate, absoluteFilePath } = content;
     const frontMatter = getFrontMatter<
       MandatoryFrontMatter,
@@ -45,4 +45,5 @@ export const getMarkdownContentWithMetadata = <
     };
     return markdownContentWithMetadata;
   });
+  return results;
 };

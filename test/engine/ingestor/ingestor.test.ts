@@ -1,12 +1,12 @@
-import { getMarkdownContentWithMetadata } from "@engine/ingestor/ingestor";
+import { getMarkdownContentWithMetadata } from "@engine/ingestor";
 import { expect } from "chai";
 import { mkdirSync, statSync, writeFileSync } from "fs";
 import path from "path";
 import { createTmpDirectoryAndTest } from "test/helper";
 
 describe("ingestor", () => {
-  it("All fields are retrieved correctly", () => {
-    createTmpDirectoryAndTest(async (tmpDir) => {
+  it("All fields are retrieved correctly", async () => {
+    await createTmpDirectoryAndTest(async (tmpDir) => {
       const nestedDirPath = path.join(tmpDir, "nested");
       const nestedFilePath = path.join(nestedDirPath, "nested.md");
       const rootFilePath1 = path.join(tmpDir, "root1.md");
@@ -28,9 +28,9 @@ describe("ingestor", () => {
       );
       expect(result).length(3);
       expect(result[0].frontMatter.title).to.equal("thing1");
-      expect(result[0].frontMatter.desc).to.be.null;
+      expect(result[0].frontMatter.desc).to.be.undefined;
       expect(result[1].frontMatter.title).to.equal("thing2");
-      expect(result[1].frontMatter.desc).to.be.null;
+      expect(result[1].frontMatter.desc).to.be.undefined;
       expect(result[2].frontMatter.title).to.equal("thing3");
       expect(result[2].frontMatter.desc).to.be.equal("desc1");
 

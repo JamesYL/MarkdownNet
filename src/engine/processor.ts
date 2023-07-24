@@ -1,5 +1,5 @@
-import { MarkdownContentWithMetadata } from "@engine/ingestor/ingestor";
-import { ValidateFlags, validateFilePaths } from "./services/validator";
+import { MarkdownContentWithMetadata } from "@engine/ingestor";
+import { ValidateFlags, validateFilePaths } from "./processor/validator";
 
 const defaultValidateFlags: ValidateFlags = {
   validateEntryFiles: { entryFileName: "index.md" },

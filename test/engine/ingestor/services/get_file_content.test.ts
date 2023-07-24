@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { getFileContentInDirectory } from "@engine/ingestor/services/get_file_content";
+import { getFileContentInDirectory } from "@engine/ingestor/get_file_content";
 import { writeFileSync, mkdirSync, statSync } from "fs";
 import path from "path";
 import { createTmpDirectoryAndTest } from "../../../helper";
