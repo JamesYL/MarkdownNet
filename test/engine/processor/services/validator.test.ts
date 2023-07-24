@@ -1,11 +1,15 @@
 import { validateFilePaths } from "@engine/processor/services/validator";
 import { expect } from "chai";
+
 describe("processor - validator", () => {
   it("Duplicate file paths are not allowed", () => {
-    expect(() => validateFilePaths(["abc/test.md", "abc/test.md"])).to.throw();
     expect(() =>
-      validateFilePaths(["abc/test.md", "abc/test1.md"]),
+      validateFilePaths(["abc/test.md", "abc/test.md"], {}),
+    ).to.throw();
+    expect(() =>
+      validateFilePaths(["abc/test.md", "abc/test1.md"], {}),
     ).to.not.throw();
+    expect(() => validateFilePaths([], {})).to.not.throw();
   });
 
   it("Bad file path names are not allowed", () => {
@@ -25,11 +29,41 @@ describe("processor - validator", () => {
       "test.12.md",
     ];
     badFilePaths.forEach(
-      (item) => expect(() => validateFilePaths([item])).to.throw,
+      (item) => expect(() => validateFilePaths([item], {})).to.throw,
     );
     const goodFilePaths = ["test.md", "path/to/test.md", "test.lasdjfalksdjf"];
     goodFilePaths.forEach((item) =>
-      expect(() => validateFilePaths([item])).to.not.throw(),
+      expect(() => validateFilePaths([item], {})).to.not.throw(),
+    );
+  });
+
+  it("When validateEntryFiles is set, all directories must have entry files", () => {
+    const goodFilePaths = [
+      "index.md",
+      "nested/index.md",
+      "another/index.md",
+      "another/another/index.md",
+      "nested/random.md",
+      "another/another/random.md",
+    ];
+    expect(() =>
+      validateFilePaths(goodFilePaths, {
+        validateEntryFiles: { entryFileName: "index.md" },
+      }),
+    ).to.not.throw();
+
+    const badFilePaths = [
+      ["nested/index.md"],
+      ["index.md", "nested/random.md"],
+      [""],
+    ];
+
+    badFilePaths.forEach((item) =>
+      expect(() =>
+        validateFilePaths(item, {
+          validateEntryFiles: { entryFileName: "index.md" },
+        }),
+      ).to.throw(),
     );
   });
 });
