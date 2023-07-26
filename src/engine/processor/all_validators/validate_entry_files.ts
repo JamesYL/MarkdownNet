@@ -1,4 +1,5 @@
 import path from "path";
+import { fileNameRegexString } from "./validate_file_path_names";
 
 /*
  * This ensures each sub-directory has an entry file
@@ -7,6 +8,11 @@ export const validateEntryFiles = (
   filePaths: string[],
   entryFileName: string,
 ): void => {
+  if (!new RegExp(fileNameRegexString).test(entryFileName))
+    throw new Error(
+      `Entry file name must follows this regex ${fileNameRegexString} : >>>${entryFileName}<<<`,
+    );
+
   const filePathsSet = new Set(filePaths);
   const directories = new Set(
     filePaths.flatMap((item) => {

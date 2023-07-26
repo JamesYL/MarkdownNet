@@ -39,7 +39,13 @@ describe("processor - validator", () => {
     );
   });
 
-  it("When validateEntryFiles is set, all directories must have entry files", () => {
+  it("When validateEntryFiles is set, all directories must have valid entry files", () => {
+    expect(() =>
+      validateFilePaths([], {
+        validateEntryFiles: { entryFileName: "indexA.md" }, // Bad entry file name
+      }),
+    ).to.throw();
+
     const goodFilePaths = [
       "index.md",
       "nested/index.md",

@@ -1,5 +1,8 @@
 import path from "path";
 
+export const fileNameRegexString = "^[a-z0-9_]+(\\.[a-z]+)?$";
+export const directoryRegexString = "^[a-z0-9_]+$";
+
 /**
  * This ensures the path follows snakecase naming scheme
  */
@@ -8,9 +11,6 @@ export const validateFilePathNames = (filePaths: string[]): void => {
     const parts = filePath.split(path.sep);
     const fileName = parts[parts.length - 1];
     const directories = parts.slice(0, parts.length - 1);
-
-    const fileNameRegexString = "^[a-z0-9_]+(\\.[a-z]+)?$";
-    const directoryRegexString = "^[a-z0-9_]+$";
 
     if (!new RegExp(fileNameRegexString).test(fileName)) {
       throw new Error(

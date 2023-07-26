@@ -1,5 +1,11 @@
 import { MarkdownContentWithMetadata } from "@engine/ingestor";
-import { ValidateFlags, validateFilePaths } from "./processor/validator";
+import {
+  ValidateFlags,
+  validateFilePaths,
+  validateFrontMatter,
+} from "./processor/validator";
+import { ZodObject } from "zod";
+import { FrontMatter } from "./ingestor/get_front_matter";
 
 const defaultValidateFlags: ValidateFlags = {
   validateEntryFiles: { entryFileName: "index.md" },
@@ -14,9 +20,18 @@ export const processMarkdownContent = <
     OptionalFrontMatter
   >[],
   validateSettings: ValidateFlags = defaultValidateFlags,
-): number => {
+  frontMatterSchema: ZodObject<
+    FrontMatter<MandatoryFrontMatter, OptionalFrontMatter>
+  >,
+): any => {
   const filePaths = content.map((item) => item.relativeFilePath);
   validateFilePaths(filePaths, validateSettings);
 
-  return content;
+  const parsedFrontMatter = content.map(({ frontMatter }) =>
+    validateFrontMatter<MandatoryFrontMatter, OptionalFrontMatter>(
+      frontMatter,
+      frontMatterSchema,
+    ),
+  );
+  return { parsedFrontMatter };
 };
