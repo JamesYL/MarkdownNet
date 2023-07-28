@@ -25,12 +25,15 @@ export const validateFilePaths = (
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const validateFrontMatter = <
+export const parseFrontMatter = <
   MandatoryFields extends string,
   OptionalFields extends string,
 >(
   frontMatter: FrontMatter<MandatoryFields, OptionalFields>,
   schema: ZodObject<FrontMatter<MandatoryFields, OptionalFields>>,
-) => {
-  return schema.parse(frontMatter);
+): FrontMatter<MandatoryFields, OptionalFields> => {
+  return schema.parse(frontMatter) as FrontMatter<
+    MandatoryFields,
+    OptionalFields
+  >;
 };
