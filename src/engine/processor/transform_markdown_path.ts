@@ -12,11 +12,17 @@ const isWebPath = (filePath: string): boolean => {
 
 const isLocalPath = (filePath: string): boolean => filePath.startsWith(".");
 
+/**
+ * Converts all local file paths found in markdown files into web paths.
+ * @param markdownContent Something like "# Title \nThis is a [test](./file.md)"
+ * @param relativeMarkdownFilePath Where the markdown file is located, like "path/to/file.md"
+ * @param webPathPrefix This is appened to the resolved path prefix
+ * @returns The updated markdown with any links pointing from local files to absolute web paths, with the newFilePathPrefix appended
+ */
 export const convertMarkdownPathsIntoWebPaths = (
   markdownContent: string,
   relativeMarkdownFilePath: string,
-  newFilePathPrefix: string,
-  entryFile?: string,
+  webPathPrefix: string,
 ): string => {
   const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
   return markdownContent.replace(
@@ -24,14 +30,13 @@ export const convertMarkdownPathsIntoWebPaths = (
     (fullMatch: string, title: string, matchedUri: string) => {
       if (isWebPath(matchedUri)) return fullMatch;
       if (isLocalPath(matchedUri)) {
-        let fullPath = path.join(
+        if (matchedUri.startsWith("/"))
+          throw new Error("Local file path must be relative");
+        const fullPath = path.join(
           "/",
-          newFilePathPrefix,
-          relativeMarkdownFilePath,
-          matchedUri,
+          webPathPrefix,
+          path.join("/", relativeMarkdownFilePath, matchedUri),
         );
-        if (entryFile && fullPath.endsWith(`/${entryFile}`))
-          fullPath = path.dirname(fullPath);
         return `[${title}](${fullPath})`;
       }
       throw new Error(
