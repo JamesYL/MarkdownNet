@@ -41,9 +41,10 @@ describe("processor - validator", () => {
 
   it("When validateEntryFiles is set, all directories must have valid entry files", () => {
     expect(() =>
-      validateFilePaths([], {
-        validateEntryFiles: { entryFileName: "indexA.md" }, // Bad entry file name
-      }),
+      validateFilePaths(
+        [],
+        { entryFileName: "indexA.md" }, // Bad entry file name
+      ),
     ).to.throw();
 
     const goodFilePaths = [
@@ -55,9 +56,7 @@ describe("processor - validator", () => {
       "another/another/random.md",
     ];
     expect(() =>
-      validateFilePaths(goodFilePaths, {
-        validateEntryFiles: { entryFileName: "index.md" },
-      }),
+      validateFilePaths(goodFilePaths, { entryFileName: "index.md" }),
     ).to.not.throw();
 
     const badFilePaths = [
@@ -68,9 +67,7 @@ describe("processor - validator", () => {
 
     badFilePaths.forEach((item) =>
       expect(() =>
-        validateFilePaths(item, {
-          validateEntryFiles: { entryFileName: "index.md" },
-        }),
+        validateFilePaths(item, { entryFileName: "index.md" }),
       ).to.throw(),
     );
   });

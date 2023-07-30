@@ -1,25 +1,18 @@
 import { MarkdownContentWithMetadata } from "@engine/ingestor";
-import {
-  ValidateFlags,
-  validateFilePaths,
-  parseFrontMatter,
-} from "./processor/validator";
+import { validateFilePaths, parseFrontMatter } from "./processor/validator";
 import { ZodObject } from "zod";
 import { FrontMatter } from "./ingestor/get_front_matter";
 import { convertMarkdownPathsIntoWebPaths } from "./processor/transform_markdown_path";
-
-const defaultValidateFlags: ValidateFlags = {
-  validateEntryFiles: { entryFileName: "index.md" },
-};
+import transformerGenerator from "./processor/transformers/all_directories_populated_transformer";
 
 const defaultSettings: Settings = {
-  validateFlags: defaultValidateFlags,
   webPathPrefix: "",
+  entryFileName: "index.md",
 };
 
 export interface Settings {
-  validateFlags: ValidateFlags;
   webPathPrefix: string;
+  entryFileName?: string;
 }
 
 export interface ProcessedData<
@@ -45,7 +38,8 @@ export const processMarkdownContent = <
   >,
 ): ProcessedData<MandatoryFrontMatter, OptionalFrontMatter>[] => {
   const filePaths = content.map((item) => item.relativeFilePath);
-  validateFilePaths(filePaths, settings.validateFlags);
+  const filePathSet = new Set(filePaths);
+  validateFilePaths(filePaths, { entryFileName: settings.entryFileName });
 
   return content.map(
     ({ frontMatter, markdownContent, fileLastModified, relativeFilePath }) => {
@@ -58,6 +52,8 @@ export const processMarkdownContent = <
         markdownContent,
         relativeFilePath,
         settings.webPathPrefix,
+        filePathSet,
+        transformerGenerator(settings.entryFileName ?? ""),
       );
       return {
         parsedFrontMatter,

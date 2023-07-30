@@ -10,7 +10,14 @@ const isWebPath = (filePath: string): boolean => {
   );
 };
 
-const isLocalPath = (filePath: string): boolean => filePath.startsWith(".");
+export const isLocalPath = (filePath: string): boolean =>
+  filePath.startsWith(".");
+
+export type Transformer = (
+  localMatchedPath: string,
+  markdownFileEntryPath: string,
+  allFilePaths: Set<string>,
+) => string;
 
 /**
  * Converts all local file paths found in markdown files into web paths.
@@ -23,25 +30,33 @@ export const convertMarkdownPathsIntoWebPaths = (
   markdownContent: string,
   relativeMarkdownFilePath: string,
   webPathPrefix: string,
+  allFilePaths: Set<string>,
+  transformer: Transformer,
 ): string => {
   const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
   return markdownContent.replace(
     linkRegex,
-    (fullMatch: string, title: string, matchedUri: string) => {
-      if (isWebPath(matchedUri)) return fullMatch;
-      if (isLocalPath(matchedUri)) {
-        if (matchedUri.startsWith("/"))
-          throw new Error("Local file path must be relative");
-        const fullPath = path.join(
-          "/",
-          webPathPrefix,
-          path.join("/", relativeMarkdownFilePath, matchedUri),
+    (fullMatch: string, title: string, matchedPath: string) => {
+      if (isWebPath(matchedPath)) return fullMatch;
+      if (!isLocalPath(matchedPath))
+        throw new Error(
+          `Invalid path found for match >>>${fullMatch}<<< and for the file >>>${relativeMarkdownFilePath}<<<`,
         );
-        return `[${title}](${fullPath})`;
-      }
-      throw new Error(
-        `Invalid path found for match >>>${fullMatch}<<< and for the file >>>${relativeMarkdownFilePath}<<<`,
+      if (matchedPath.startsWith("/"))
+        throw new Error("Local file path must be relative");
+
+      const transformedPath = transformer(
+        matchedPath,
+        relativeMarkdownFilePath,
+        allFilePaths,
       );
+
+      const fullPath = path.join(
+        "/",
+        webPathPrefix,
+        path.join("/", transformedPath),
+      );
+      return `[${title}](${fullPath})`;
     },
   );
 };

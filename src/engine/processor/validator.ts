@@ -1,14 +1,11 @@
 import { FrontMatter } from "@engine/ingestor/get_front_matter";
-import { ensureNoDuplicatePaths } from "./all_validators/ensure_no_duplicate_paths";
-import { validateEntryFiles } from "./all_validators/validate_entry_files";
-import { validateFilePathNames } from "./all_validators/validate_file_path_names";
+import { ensureNoDuplicatePaths } from "./validators/ensure_no_duplicate_paths";
+import { validateEntryFiles } from "./validators/validate_entry_files";
+import { validateFilePathNames } from "./validators/validate_file_path_names";
 import { ZodObject } from "zod";
 
 export interface ValidateFlags {
-  /** If enabled, ensures each directory has a file with the name `entryFileName` */
-  validateEntryFiles?: {
-    entryFileName: string;
-  };
+  entryFileName?: string;
 }
 
 export const validateFilePaths = (
@@ -20,8 +17,8 @@ export const validateFilePaths = (
   ensureNoDuplicatePaths(filePaths);
 
   // Custom validators
-  if (settings.validateEntryFiles)
-    validateEntryFiles(filePaths, settings.validateEntryFiles.entryFileName);
+  if (settings.entryFileName)
+    validateEntryFiles(filePaths, settings.entryFileName);
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

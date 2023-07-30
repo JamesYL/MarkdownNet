@@ -1,6 +1,15 @@
 import { convertMarkdownPathsIntoWebPaths } from "@engine/processor/transform_markdown_path";
+import genTransformer from "@engine/processor/transformers/all_directories_populated_transformer";
 import { expect } from "chai";
 
+const allFilePaths = new Set([
+  "path/to/file.md",
+  "path/file.md",
+  "path/to/file2.md",
+  "path/to/file3.md",
+  "file.md",
+]);
+const transformer = genTransformer("index.md");
 describe("processor - transform_markdown_paths", () => {
   const testSlashPermutations = (
     content: string,
@@ -17,6 +26,8 @@ describe("processor - transform_markdown_paths", () => {
             content,
             relativeMarkdownFilePath,
             newWebPathPrefix,
+            allFilePaths,
+            transformer,
           );
           expect(result).to.equal(expected);
         });
@@ -60,6 +71,8 @@ describe("processor - transform_markdown_paths", () => {
         content,
         relativeMarkdownFilePath,
         webPathPrefix,
+        allFilePaths,
+        transformer,
       ),
     ).to.throw();
   });
