@@ -1,7 +1,9 @@
+import { parseFrontMatter } from "./../../src/engine/processor/validator";
 import { MarkdownContentWithMetadata } from "@engine/ingestor";
 import { processMarkdownContent } from "@engine/processor";
+import { DirectoryStructure } from "@engine/processor/validators/validate_directory_structure";
 import { expect } from "chai";
-import { ZodSchema, z } from "zod";
+import { z } from "zod";
 type MandatoryFrontMatter = "title" | "desc";
 type OptionalFrontMatter = "random";
 const content: MarkdownContentWithMetadata<
@@ -10,7 +12,7 @@ const content: MarkdownContentWithMetadata<
 >[] = [
   {
     markdownContent: "# Hello [test](../world.md)",
-    frontMatter: { title: "Hello", desc: "World", random: 1 },
+    frontMatter: { title: "Hello", desc: "World", random: "abcde" },
     fileLastModified: new Date(),
     relativeFilePath: "index.md",
   },
@@ -25,35 +27,54 @@ const settings = {
   entryFileName: "index.md",
   webPathPrefix: "prefix",
 };
-type SchemaType = { title: string; desc: string; random?: number };
-const schema: ZodSchema<SchemaType> = z.object({
+const directorySchema: DirectoryStructure = {
+  "index.md": {},
+  "world.md": {},
+};
+type FrontMatterSchema = {
+  title: string;
+  desc: string;
+};
+const schema = z.object({
   title: z.string(),
   desc: z.string(),
-  random: z.number().optional(),
+  random: z.string().length(5).optional(),
 });
 describe("processor", () => {
   it("processMarkdownContent", () => {
-    const res = processMarkdownContent<SchemaType>(content, settings, schema);
+    const res = processMarkdownContent<FrontMatterSchema>(
+      content,
+      settings,
+      schema,
+      directorySchema,
+    );
     expect(res[0].markdownWithWebPaths).to.be.equal(
       "# Hello [test](/prefix/world.md)",
     );
-    expect(res[1].markdownWithWebPaths).to.be.equal("# Hello [test](/prefix)");
+    expect(res[0].relativeFilePath).to.be.equal("index.md");
+    expect(res[0].fileLastModified).to.be.equal(content[0].fileLastModified);
+    expect(res[0].parsedFrontMatter.desc).to.be.equal(
+      content[0].frontMatter.desc,
+    );
+
+    expect(res[1].relativeFilePath).to.be.equal("world.md");
   });
 
   it("processMarkdownContent fails when frontmatter doesn't pass schema", () => {
-    const runner = () =>
-      processMarkdownContent<SchemaType>(
+    expect(() =>
+      processMarkdownContent<FrontMatterSchema>(
         [
           {
             markdownContent: "# Hello [test](../world.md)",
-            frontMatter: { title: "Hello", desc: "World", random: "random" }, // Random should be number
+            frontMatter: { title: "Hello", desc: "World", random: "random" }, // Random too long
             fileLastModified: new Date(),
             relativeFilePath: "index.md",
           },
         ],
         settings,
         schema,
-      );
-    expect(runner).to.throw();
+        directorySchema,
+      ),
+    ).to.throw();
   });
 });

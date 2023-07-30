@@ -1,4 +1,4 @@
-import { Transformer } from "@engine/processor/transform_markdown_path";
+import { Transformer } from "@engine/processor/transformer";
 import genTransformer from "@engine/processor/transformers/all_directories_populated_transformer";
 import { expect } from "chai";
 

@@ -1,7 +1,8 @@
+import { DirectoryStructure } from "./processor/validators/validate_directory_structure";
 import { MarkdownContentWithMetadata } from "@engine/ingestor";
 import { validateFilePaths, parseFrontMatter } from "./processor/validator";
 import { ZodSchema } from "zod";
-import { convertMarkdownPathsIntoWebPaths } from "./processor/transform_markdown_path";
+import { convertMarkdownPathsIntoWebPaths } from "./processor/transformer";
 import transformerGenerator from "./processor/transformers/all_directories_populated_transformer";
 
 const defaultSettings: Settings = {
@@ -14,24 +15,35 @@ export interface Settings {
   entryFileName?: string;
 }
 
-export interface ProcessedData<T extends object> {
+export interface ProcessedData<T extends Record<string, string>> {
   parsedFrontMatter: T;
   markdownWithWebPaths: string;
   fileLastModified: Date;
+  relativeFilePath: string;
 }
 
-export const processMarkdownContent = <T extends object>(
+export const processMarkdownContent = <
+  FrontMatterSchema extends Record<string, string>,
+>(
   content: MarkdownContentWithMetadata<string, string>[],
   settings: Settings = defaultSettings,
-  zodSchema: ZodSchema<T>,
-): ProcessedData<T>[] => {
+  frontMatterSchema: ZodSchema<FrontMatterSchema>,
+  directoryStructure?: DirectoryStructure,
+): ProcessedData<FrontMatterSchema>[] => {
   const filePaths = content.map((item) => item.relativeFilePath);
   const filePathSet = new Set(filePaths);
-  validateFilePaths(filePaths, { entryFileName: settings.entryFileName });
+  validateFilePaths(
+    filePaths,
+    { entryFileName: settings.entryFileName },
+    directoryStructure,
+  );
 
   return content.map(
     ({ frontMatter, markdownContent, fileLastModified, relativeFilePath }) => {
-      const parsedFrontMatter = parseFrontMatter(frontMatter, zodSchema);
+      const parsedFrontMatter = parseFrontMatter(
+        frontMatter,
+        frontMatterSchema,
+      );
 
       const markdownWithWebPaths = convertMarkdownPathsIntoWebPaths(
         markdownContent,
@@ -40,11 +52,13 @@ export const processMarkdownContent = <T extends object>(
         filePathSet,
         transformerGenerator(settings.entryFileName ?? ""),
       );
-      return {
+      const res: ProcessedData<FrontMatterSchema> = {
         parsedFrontMatter,
         markdownWithWebPaths,
+        relativeFilePath,
         fileLastModified,
       };
+      return res;
     },
   );
 };

@@ -42,8 +42,6 @@ export const convertMarkdownPathsIntoWebPaths = (
         throw new Error(
           `Invalid path found for match >>>${fullMatch}<<< and for the file >>>${relativeMarkdownFilePath}<<<`,
         );
-      if (matchedPath.startsWith("/"))
-        throw new Error("Local file path must be relative");
 
       const transformedPath = transformer(
         matchedPath,

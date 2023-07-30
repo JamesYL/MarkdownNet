@@ -1,5 +1,5 @@
 import path from "path";
-import { Transformer } from "../transform_markdown_path";
+import { Transformer } from "../transformer";
 
 /**
  * This transformer will combine the entry path to the matched path.

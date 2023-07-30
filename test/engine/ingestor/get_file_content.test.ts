@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { getFileContentInDirectory } from "@engine/ingestor/get_file_content";
 import { writeFileSync, mkdirSync, statSync } from "fs";
 import path from "path";
-import { createTmpDirectoryAndTest } from "../../../helper";
+import { createTmpDirectoryAndTest } from "../../helper";
 
 describe("ingestor - get_file_content", () => {
   it("Valid markdown files in nested directories are detected", async () => {
