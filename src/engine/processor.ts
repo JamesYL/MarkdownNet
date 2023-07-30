@@ -1,7 +1,6 @@
 import { MarkdownContentWithMetadata } from "@engine/ingestor";
 import { validateFilePaths, parseFrontMatter } from "./processor/validator";
-import { ZodObject } from "zod";
-import { FrontMatter } from "./ingestor/get_front_matter";
+import { ZodSchema } from "zod";
 import { convertMarkdownPathsIntoWebPaths } from "./processor/transform_markdown_path";
 import transformerGenerator from "./processor/transformers/all_directories_populated_transformer";
 
@@ -15,38 +14,24 @@ export interface Settings {
   entryFileName?: string;
 }
 
-export interface ProcessedData<
-  MandatoryFrontMatter extends string,
-  OptionalFrontMatter extends string,
-> {
-  parsedFrontMatter: FrontMatter<MandatoryFrontMatter, OptionalFrontMatter>;
+export interface ProcessedData<T extends object> {
+  parsedFrontMatter: T;
   markdownWithWebPaths: string;
   fileLastModified: Date;
 }
 
-export const processMarkdownContent = <
-  MandatoryFrontMatter extends string,
-  OptionalFrontMatter extends string,
->(
-  content: MarkdownContentWithMetadata<
-    MandatoryFrontMatter,
-    OptionalFrontMatter
-  >[],
+export const processMarkdownContent = <T extends object>(
+  content: MarkdownContentWithMetadata<string, string>[],
   settings: Settings = defaultSettings,
-  frontMatterSchema: ZodObject<
-    FrontMatter<MandatoryFrontMatter, OptionalFrontMatter>
-  >,
-): ProcessedData<MandatoryFrontMatter, OptionalFrontMatter>[] => {
+  zodSchema: ZodSchema<T>,
+): ProcessedData<T>[] => {
   const filePaths = content.map((item) => item.relativeFilePath);
   const filePathSet = new Set(filePaths);
   validateFilePaths(filePaths, { entryFileName: settings.entryFileName });
 
   return content.map(
     ({ frontMatter, markdownContent, fileLastModified, relativeFilePath }) => {
-      const parsedFrontMatter = parseFrontMatter<
-        MandatoryFrontMatter,
-        OptionalFrontMatter
-      >(frontMatter, frontMatterSchema);
+      const parsedFrontMatter = parseFrontMatter(frontMatter, zodSchema);
 
       const markdownWithWebPaths = convertMarkdownPathsIntoWebPaths(
         markdownContent,

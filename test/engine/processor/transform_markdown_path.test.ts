@@ -8,6 +8,7 @@ const allFilePaths = new Set([
   "path/to/file2.md",
   "path/to/file3.md",
   "file.md",
+  "/",
 ]);
 const transformer = genTransformer("index.md");
 describe("processor - transform_markdown_paths", () => {
@@ -86,12 +87,26 @@ describe("processor - transform_markdown_paths", () => {
       "This is a [test](https://www.google.com)",
       "This is a [test](mailto:someone@google.com)",
     ].forEach((content) => {
+      const expected = content;
       testSlashPermutations(
         content,
         relativeMarkdownFilePath,
         webPathPrefix,
-        content,
+        expected,
       );
     });
+  });
+
+  it("When the path and prefix are empty, it should be just be a slash", () => {
+    const content = "This is a [test](..)";
+    const relativeMarkdownFilePath = "file.md";
+    const webPathPrefix = "";
+    const expected = "This is a [test](/)";
+    testSlashPermutations(
+      content,
+      relativeMarkdownFilePath,
+      webPathPrefix,
+      expected,
+    );
   });
 });

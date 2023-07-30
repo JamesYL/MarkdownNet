@@ -51,11 +51,13 @@ export const convertMarkdownPathsIntoWebPaths = (
         allFilePaths,
       );
 
-      const fullPath = path.join(
+      let fullPath = path.join(
         "/",
         webPathPrefix,
         path.join("/", transformedPath),
       );
+      if (fullPath !== "/" && fullPath.endsWith("/"))
+        fullPath = fullPath.slice(0, -1);
       return `[${title}](${fullPath})`;
     },
   );

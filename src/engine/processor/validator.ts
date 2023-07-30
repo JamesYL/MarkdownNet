@@ -2,7 +2,7 @@ import { FrontMatter } from "@engine/ingestor/get_front_matter";
 import { ensureNoDuplicatePaths } from "./validators/ensure_no_duplicate_paths";
 import { validateEntryFiles } from "./validators/validate_entry_files";
 import { validateFilePathNames } from "./validators/validate_file_path_names";
-import { ZodObject } from "zod";
+import { ZodSchema } from "zod";
 
 export interface ValidateFlags {
   entryFileName?: string;
@@ -22,15 +22,9 @@ export const validateFilePaths = (
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const parseFrontMatter = <
-  MandatoryFields extends string,
-  OptionalFields extends string,
->(
-  frontMatter: FrontMatter<MandatoryFields, OptionalFields>,
-  schema: ZodObject<FrontMatter<MandatoryFields, OptionalFields>>,
-): FrontMatter<MandatoryFields, OptionalFields> => {
-  return schema.parse(frontMatter) as FrontMatter<
-    MandatoryFields,
-    OptionalFields
-  >;
+export const parseFrontMatter = <T extends object>(
+  frontMatter: FrontMatter<string, string>,
+  schema: ZodSchema<T>,
+): T => {
+  return schema.parse(frontMatter);
 };

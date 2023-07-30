@@ -17,7 +17,7 @@ const verifyFieldValueConvention = (rawFieldValue: string): void => {
 };
 
 type RequiredFrontMatter<MandatoryFields extends string> = {
-  [K in MandatoryFields]: string;
+  [K in MandatoryFields]: unknown;
 };
 type OptionalFrontMatter<OptionalFields extends string> = Partial<
   RequiredFrontMatter<OptionalFields>
