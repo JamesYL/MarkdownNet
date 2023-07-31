@@ -4,40 +4,33 @@ import {
   Settings,
   processMarkdownContent,
 } from "@engine/processor";
-import { DirectoryStructure } from "@engine/processor/validators/validate_directory_structure";
 import { ZodSchema } from "zod";
 
-export const main = <FrontMatterSchema extends Record<string, string>>(
+export { Settings } from "@engine/processor";
+
+export const getDefaultSettings = (): Settings => {
+  const defaultSettings: Settings = {
+    webPathPrefix: "",
+    entryFileName: "index.md",
+  };
+  return defaultSettings;
+};
+
+/**
+ * @param directory An entry directory that contains all the markdown files
+ * @param frontMatterSchema A zod schema that defines what front matter the markdown files should have
+ * @param settings Optional configuration
+ */
+export const getMarkdownNet = <
+  FrontMatterSchema extends Record<string, string>,
+>(
   directory: string,
   frontMatterSchema: ZodSchema<FrontMatterSchema>,
   settings?: Settings,
-  directoryStructure?: DirectoryStructure,
 ): ProcessedData<FrontMatterSchema>[] => {
   return processMarkdownContent(
     getMarkdownContentWithMetadata(directory),
     frontMatterSchema,
-    settings,
-    directoryStructure,
+    settings ?? getDefaultSettings(),
   );
-
-  // const metadataSchema = z.object({
-  //   title: z.string().min(4).max(70),
-  //   desc: z.string().min(20).max(150),
-  //   priority: z.number(),
-  // });
-  // export interface DocObject {
-  //   title: string;
-  //   desc: string;
-  //   content: string;
-  //   createdDate: Date;
-  //   updatedDate: Date;
-  //   path: string;
-  //   fileType: string;
-  //   priority: number;
-  // }
-  // export interface Metadata {
-  //   title: string;
-  //   desc: string;
-  //   priority: number;
-  // }
 };

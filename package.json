@@ -1,5 +1,9 @@
 {
   "name": "markdown-net",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JamesYL/MarkdownNet"
+  },
   "version": "1.0.1",
   "description": "Takes a nested directory of markdown files and outputs a single JSON representation of everything.",
   "author": "JamesYL",

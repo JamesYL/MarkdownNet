@@ -17,14 +17,16 @@ const content: MarkdownContentWithMetadata[] = [
     relativeFilePath: "world.md",
   },
 ];
-const settings = {
-  entryFileName: "index.md",
-  webPathPrefix: "prefix",
-};
 const directorySchema: DirectoryStructure = {
   "index.md": {},
   "world.md": {},
 };
+const settings = {
+  entryFileName: "index.md",
+  webPathPrefix: "prefix",
+  directorySchema,
+};
+
 type FrontMatterSchema = {
   title: string;
   desc: string;
@@ -40,7 +42,6 @@ describe("processor", () => {
       content,
       schema,
       settings,
-      directorySchema,
     );
     expect(res[0].markdownWithWebPaths).to.be.equal(
       "# Hello [test](/prefix/world.md)",
@@ -67,7 +68,6 @@ describe("processor", () => {
         ],
         schema,
         settings,
-        directorySchema,
       ),
     ).to.throw();
   });

@@ -5,14 +5,10 @@ import { ZodSchema } from "zod";
 import { convertMarkdownPathsIntoWebPaths } from "./processor/transformer";
 import transformerGenerator from "./processor/transformers/all_directories_populated_transformer";
 
-const defaultSettings: Settings = {
-  webPathPrefix: "",
-  entryFileName: "index.md",
-};
-
 export interface Settings {
   webPathPrefix: string;
   entryFileName?: string;
+  directoryStructure?: DirectoryStructure;
 }
 
 export interface ProcessedData<T extends Record<string, string>> {
@@ -27,15 +23,14 @@ export const processMarkdownContent = <
 >(
   content: MarkdownContentWithMetadata[],
   frontMatterSchema: ZodSchema<FrontMatterSchema>,
-  settings: Settings = defaultSettings,
-  directoryStructure?: DirectoryStructure,
+  settings: Settings,
 ): ProcessedData<FrontMatterSchema>[] => {
   const filePaths = content.map((item) => item.relativeFilePath);
   const filePathSet = new Set(filePaths);
   validateFilePaths(
     filePaths,
     { entryFileName: settings.entryFileName },
-    directoryStructure,
+    settings.directoryStructure,
   );
 
   return content.map(
