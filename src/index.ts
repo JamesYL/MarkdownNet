@@ -1,12 +1,22 @@
 import { getMarkdownContentWithMetadata } from "@engine/ingestor";
-import {
-  ProcessedData,
-  Settings,
-  processMarkdownContent,
-} from "@engine/processor";
+import { processMarkdownContent } from "@engine/processor";
 import { ZodSchema } from "zod";
+export interface Settings {
+  webPathPrefix: string;
+  entryFileName?: string;
+  directoryStructure?: DirectoryStructure;
+}
 
-export { Settings } from "@engine/processor";
+export interface DirectoryStructure {
+  [key: string]: DirectoryStructure | Record<string, never>;
+}
+
+export interface ProcessedData<T extends Record<string, string>> {
+  parsedFrontMatter: T;
+  markdownWithWebPaths: string;
+  fileLastModified: Date;
+  relativeFilePath: string;
+}
 
 export const getDefaultSettings = (): Settings => {
   const defaultSettings: Settings = {

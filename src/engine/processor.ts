@@ -1,22 +1,9 @@
-import { DirectoryStructure } from "./processor/validators/validate_directory_structure";
 import { MarkdownContentWithMetadata } from "@engine/ingestor";
 import { validateFilePaths, parseFrontMatter } from "./processor/validator";
 import { ZodSchema } from "zod";
 import { convertMarkdownPathsIntoWebPaths } from "./processor/transformer";
 import transformerGenerator from "./processor/transformers/all_directories_populated_transformer";
-
-export interface Settings {
-  webPathPrefix: string;
-  entryFileName?: string;
-  directoryStructure?: DirectoryStructure;
-}
-
-export interface ProcessedData<T extends Record<string, string>> {
-  parsedFrontMatter: T;
-  markdownWithWebPaths: string;
-  fileLastModified: Date;
-  relativeFilePath: string;
-}
+import { ProcessedData, Settings } from "src";
 
 export const processMarkdownContent = <
   FrontMatterSchema extends Record<string, string>,
