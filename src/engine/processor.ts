@@ -6,7 +6,7 @@ import transformerGenerator from "./processor/transformers/all_directories_popul
 import { ProcessedData, Settings } from "src";
 
 export const processMarkdownContent = <
-  FrontMatterSchema extends Record<string, unknown>,
+  FrontMatterSchema extends Record<string, string | number>,
 >(
   content: MarkdownContentWithMetadata[],
   frontMatterSchema: ZodSchema<FrontMatterSchema>,
