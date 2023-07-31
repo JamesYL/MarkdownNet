@@ -11,7 +11,7 @@ export interface DirectoryStructure {
   [key: string]: DirectoryStructure | Record<string, never>;
 }
 
-export interface ProcessedData<T extends Record<string, unknown>> {
+export interface ProcessedData<T = FrontMatterSchema> {
   parsedFrontMatter: T;
   markdownWithWebPaths: string;
   fileLastModified: Date;
@@ -26,21 +26,20 @@ export const getDefaultSettings = (): Settings => {
   return defaultSettings;
 };
 
+export type FrontMatterSchema = Record<string, string | number>;
+
 /**
  * @param directory An entry directory that contains all the markdown files
  * @param frontMatterSchema A zod schema that defines what front matter the markdown files should have
  * @param settings Optional configuration
  */
-export const getMarkdownNet = <
-  FrontMatterSchema extends Record<string, string>,
->(
+export const getMarkdownNet = <T = FrontMatterSchema>(
   directory: string,
-  frontMatterSchema: ZodSchema<FrontMatterSchema>,
+  frontMatterSchema: ZodSchema<T>,
   settings?: Settings,
-): ProcessedData<FrontMatterSchema>[] => {
-  return processMarkdownContent(
+): ProcessedData<T>[] =>
+  processMarkdownContent(
     getMarkdownContentWithMetadata(directory),
     frontMatterSchema,
     settings ?? getDefaultSettings(),
   );
-};

@@ -7,6 +7,7 @@ import {
   DirectoryStructure,
   validateDirectoryStructure,
 } from "./validators/validate_directory_structure";
+import { FrontMatterSchema } from "src";
 
 export interface ValidateFlags {
   entryFileName?: string;
@@ -31,7 +32,7 @@ export const validateFilePaths = (
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const parseFrontMatter = <T extends Record<string, string | number>>(
+export const parseFrontMatter = <T = FrontMatterSchema>(
   frontMatter: FrontMatter,
   schema: ZodSchema<T>,
 ): T => {

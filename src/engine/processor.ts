@@ -1,3 +1,4 @@
+import { FrontMatterSchema } from "./../index";
 import { MarkdownContentWithMetadata } from "@engine/ingestor";
 import { validateFilePaths, parseFrontMatter } from "./processor/validator";
 import { ZodSchema } from "zod";
@@ -5,13 +6,11 @@ import { convertMarkdownPathsIntoWebPaths } from "./processor/transformer";
 import transformerGenerator from "./processor/transformers/all_directories_populated_transformer";
 import { ProcessedData, Settings } from "src";
 
-export const processMarkdownContent = <
-  FrontMatterSchema extends Record<string, string | number>,
->(
+export const processMarkdownContent = <T = FrontMatterSchema>(
   content: MarkdownContentWithMetadata[],
-  frontMatterSchema: ZodSchema<FrontMatterSchema>,
+  frontMatterSchema: ZodSchema<T>,
   settings: Settings,
-): ProcessedData<FrontMatterSchema>[] => {
+): ProcessedData<T>[] => {
   const filePaths = content.map((item) => item.relativeFilePath);
   const filePathSet = new Set(filePaths);
   validateFilePaths(
@@ -22,7 +21,7 @@ export const processMarkdownContent = <
 
   return content.map(
     ({ frontMatter, markdownContent, fileLastModified, relativeFilePath }) => {
-      const parsedFrontMatter = parseFrontMatter(
+      const parsedFrontMatter: T = parseFrontMatter(
         frontMatter,
         frontMatterSchema,
       );
@@ -34,7 +33,7 @@ export const processMarkdownContent = <
         filePathSet,
         transformerGenerator(settings.entryFileName ?? ""),
       );
-      const res: ProcessedData<FrontMatterSchema> = {
+      const res: ProcessedData<T> = {
         parsedFrontMatter,
         markdownWithWebPaths,
         relativeFilePath,
