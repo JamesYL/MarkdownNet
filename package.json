@@ -4,7 +4,7 @@
     "type": "git",
     "url": "https://github.com/JamesYL/MarkdownNet"
   },
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Takes a nested directory of markdown files and outputs a single JSON representation of everything.",
   "author": "JamesYL",
   "license": "MIT",
