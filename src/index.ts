@@ -11,7 +11,7 @@ export interface DirectoryStructure {
   [key: string]: DirectoryStructure | Record<string, never>;
 }
 
-export interface ProcessedData<T extends Record<string, string>> {
+export interface ProcessedData<T extends Record<string, unknown>> {
   parsedFrontMatter: T;
   markdownWithWebPaths: string;
   fileLastModified: Date;

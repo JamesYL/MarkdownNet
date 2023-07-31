@@ -31,7 +31,7 @@ export const validateFilePaths = (
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const parseFrontMatter = <T extends Record<string, string>>(
+export const parseFrontMatter = <T extends Record<string, unknown>>(
   frontMatter: FrontMatter,
   schema: ZodSchema<T>,
 ): T => {
