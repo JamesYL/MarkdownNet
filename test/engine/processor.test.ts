@@ -1,15 +1,9 @@
-import { parseFrontMatter } from "./../../src/engine/processor/validator";
 import { MarkdownContentWithMetadata } from "@engine/ingestor";
 import { processMarkdownContent } from "@engine/processor";
 import { DirectoryStructure } from "@engine/processor/validators/validate_directory_structure";
 import { expect } from "chai";
 import { z } from "zod";
-type MandatoryFrontMatter = "title" | "desc";
-type OptionalFrontMatter = "random";
-const content: MarkdownContentWithMetadata<
-  MandatoryFrontMatter,
-  OptionalFrontMatter
->[] = [
+const content: MarkdownContentWithMetadata[] = [
   {
     markdownContent: "# Hello [test](../world.md)",
     frontMatter: { title: "Hello", desc: "World", random: "abcde" },
@@ -44,8 +38,8 @@ describe("processor", () => {
   it("processMarkdownContent", () => {
     const res = processMarkdownContent<FrontMatterSchema>(
       content,
-      settings,
       schema,
+      settings,
       directorySchema,
     );
     expect(res[0].markdownWithWebPaths).to.be.equal(
@@ -71,8 +65,8 @@ describe("processor", () => {
             relativeFilePath: "index.md",
           },
         ],
-        settings,
         schema,
+        settings,
         directorySchema,
       ),
     ).to.throw();

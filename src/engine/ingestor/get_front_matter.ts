@@ -16,16 +16,7 @@ const verifyFieldValueConvention = (rawFieldValue: string): void => {
     );
 };
 
-type RequiredFrontMatter<MandatoryFields extends string> = {
-  [K in MandatoryFields]: unknown;
-};
-type OptionalFrontMatter<OptionalFields extends string> = Partial<
-  RequiredFrontMatter<OptionalFields>
->;
-export type FrontMatter<
-  MandatoryFields extends string,
-  OptionalFields extends string,
-> = RequiredFrontMatter<MandatoryFields> & OptionalFrontMatter<OptionalFields>;
+export type FrontMatter = Record<string, string>;
 
 export const frontMatterRegex = /^[\s\n]*---\n([\s\S]+?)\n---\s*[\n|$]/;
 
@@ -33,22 +24,9 @@ export const frontMatterRegex = /^[\s\n]*---\n([\s\S]+?)\n---\s*[\n|$]/;
  * @param content Raw markdown content (including front matter)
  * @param mandatoryFields Fields that must be present in the front matter - throws exception if not present
  */
-export const getFrontMatter = <
-  MandatoryFields extends string,
-  OptionalFields extends string,
->(
-  rawContent: string,
-  mandatoryFields: Set<MandatoryFields>,
-): FrontMatter<MandatoryFields, OptionalFields> => {
-  for (const mandatoryField of mandatoryFields)
-    verifyFieldNameConvention(mandatoryField as string);
-
+export const getFrontMatter = (rawContent: string): FrontMatter => {
   const match = rawContent.match(frontMatterRegex);
-  if (match === null) {
-    if (mandatoryFields.size === 0)
-      return {} as FrontMatter<MandatoryFields, OptionalFields>;
-    throw new Error("Could not find front matter in content.");
-  }
+  if (match === null) return {} as FrontMatter;
 
   const frontMatterString = match[1];
 
@@ -64,19 +42,9 @@ export const getFrontMatter = <
     verifyFieldNameConvention(fieldName);
     verifyFieldValueConvention(fieldValue);
 
-    mandatoryFields.delete(fieldName as MandatoryFields);
-
     if (fieldName in fields) throw new Error("Duplicate field name");
 
     fields[fieldName] = fieldValue;
   });
-
-  if (mandatoryFields.size === 0)
-    return fields as FrontMatter<MandatoryFields, OptionalFields>;
-
-  throw new Error(
-    `Missing mandatory fields in front matter: >>>${[...mandatoryFields].join(
-      "<<<, >>>",
-    )}<<<`,
-  );
+  return fields;
 };

@@ -25,9 +25,9 @@ export interface ProcessedData<T extends Record<string, string>> {
 export const processMarkdownContent = <
   FrontMatterSchema extends Record<string, string>,
 >(
-  content: MarkdownContentWithMetadata<string, string>[],
-  settings: Settings = defaultSettings,
+  content: MarkdownContentWithMetadata[],
   frontMatterSchema: ZodSchema<FrontMatterSchema>,
+  settings: Settings = defaultSettings,
   directoryStructure?: DirectoryStructure,
 ): ProcessedData<FrontMatterSchema>[] => {
   const filePaths = content.map((item) => item.relativeFilePath);

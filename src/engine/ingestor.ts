@@ -3,12 +3,9 @@ import { getFileContentInDirectory } from "./ingestor/get_file_content";
 import path from "path";
 import { extractMarkdownContent } from "./ingestor/get_markdown_content";
 
-export type MarkdownContentWithMetadata<
-  MandatoryFrontMatter extends string,
-  OptionalFrontMatter extends string,
-> = {
+export type MarkdownContentWithMetadata = {
   markdownContent: string;
-  frontMatter: FrontMatter<MandatoryFrontMatter, OptionalFrontMatter>;
+  frontMatter: FrontMatter;
   fileLastModified: Date;
   relativeFilePath: string;
 };
@@ -17,27 +14,17 @@ export type MarkdownContentWithMetadata<
  * @param directory Directory containing markdown files
  * @param mandatoryFields Fields that must be present in the front matter - throws exception if not present
  */
-export const getMarkdownContentWithMetadata = <
-  MandatoryFrontMatter extends string,
-  OptionalFrontMatter extends string,
->(
+export const getMarkdownContentWithMetadata = (
   directory: string,
-  mandatoryFields: Set<MandatoryFrontMatter>,
-): MarkdownContentWithMetadata<MandatoryFrontMatter, OptionalFrontMatter>[] => {
+): MarkdownContentWithMetadata[] => {
   const entryDirectory = path.resolve(__dirname, directory);
   const markdownContent = getFileContentInDirectory(entryDirectory);
   const results = markdownContent.map((content) => {
     const { fileContent, updatedDate, absoluteFilePath } = content;
-    const frontMatter = getFrontMatter<
-      MandatoryFrontMatter,
-      OptionalFrontMatter
-    >(fileContent, mandatoryFields);
+    const frontMatter = getFrontMatter(fileContent);
     const markdownContent = extractMarkdownContent(fileContent);
     const relativeFilePath = path.relative(entryDirectory, absoluteFilePath);
-    const markdownContentWithMetadata: MarkdownContentWithMetadata<
-      MandatoryFrontMatter,
-      OptionalFrontMatter
-    > = {
+    const markdownContentWithMetadata: MarkdownContentWithMetadata = {
       markdownContent,
       frontMatter,
       fileLastModified: updatedDate,

@@ -22,10 +22,7 @@ describe("ingestor", () => {
         writeFileSync(filePath, fileData[i]);
       });
 
-      const result = getMarkdownContentWithMetadata<"title", "desc">(
-        tmpDir,
-        new Set(["title"]),
-      );
+      const result = getMarkdownContentWithMetadata(tmpDir);
       expect(result).length(3);
       expect(result[0].frontMatter.title).to.equal("thing1");
       expect(result[0].frontMatter.desc).to.be.undefined;
@@ -44,26 +41,6 @@ describe("ingestor", () => {
         );
         expect(content.markdownContent).to.equal("# thing");
       });
-    });
-  });
-
-  it("Throws if front matter is missing mdantory fields", () => {
-    createTmpDirectoryAndTest(async (tmpDir) => {
-      const rootFilePath = path.join(tmpDir, "root.md");
-      const fileData = [
-        "---",
-        "title:thing3\ndesc:desc1",
-        "---",
-        "# thing",
-      ].join("\n");
-      writeFileSync(rootFilePath, fileData);
-
-      expect(() =>
-        getMarkdownContentWithMetadata<"dog", "title" | "desc">(
-          tmpDir,
-          new Set(["dog"]),
-        ),
-      ).to.throw();
     });
   });
 });

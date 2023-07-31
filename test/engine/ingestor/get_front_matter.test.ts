@@ -13,7 +13,6 @@ desc_example:${validValue}
 ---
 # Thing
     `,
-      new Set(["title", "desc_example"]),
     );
     expect(frontMatter.title).equal("thing1");
     expect(frontMatter["desc_example"]).equal(validValue);
@@ -39,22 +38,12 @@ desc_example:${validValue}
     ];
     badFrontMatter.forEach((matter) => {
       expect(() =>
-        getFrontMatter(`---\n${matter}\n---\n # something`, new Set<string>()),
+        getFrontMatter(`---\n${matter}\n---\n # something`),
       ).to.throw();
     });
   });
 
-  it("Missing mandatory fields throws error", () => {
-    expect(() =>
-      getFrontMatter(
-        "---\ntitle:title\ndesc:desc\n---\n",
-        new Set(["title", "desc", "missing"]),
-      ),
-    ).to.throw();
-    expect(() => getFrontMatter("# Title", new Set(["missing"]))).to.throw();
-  });
-
   it("Empty front matter is parsed correctly", () => {
-    expect(getFrontMatter("# Title", new Set<string>())).to.be.empty;
+    expect(getFrontMatter("# Title")).to.be.empty;
   });
 });

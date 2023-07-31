@@ -1,4 +1,25 @@
-export const main = () => {
+import { getMarkdownContentWithMetadata } from "@engine/ingestor";
+import {
+  ProcessedData,
+  Settings,
+  processMarkdownContent,
+} from "@engine/processor";
+import { DirectoryStructure } from "@engine/processor/validators/validate_directory_structure";
+import { ZodSchema } from "zod";
+
+export const main = <FrontMatterSchema extends Record<string, string>>(
+  directory: string,
+  frontMatterSchema: ZodSchema<FrontMatterSchema>,
+  settings?: Settings,
+  directoryStructure?: DirectoryStructure,
+): ProcessedData<FrontMatterSchema>[] => {
+  return processMarkdownContent(
+    getMarkdownContentWithMetadata(directory),
+    frontMatterSchema,
+    settings,
+    directoryStructure,
+  );
+
   // const metadataSchema = z.object({
   //   title: z.string().min(4).max(70),
   //   desc: z.string().min(20).max(150),
