@@ -1,12 +1,11 @@
 {
   "name": "markdown-net",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Takes a nested directory of markdown files and outputs a single JSON representation of everything.",
   "author": "JamesYL",
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/index.js",
   "dependencies": {
-    "gray-matter": "^4.0.3",
     "winston": "^3.10.0",
     "zod": "^3.21.4"
   },
