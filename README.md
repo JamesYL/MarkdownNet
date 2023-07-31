@@ -5,7 +5,7 @@ Used to convert a complex directory of markdown files into a single JSON represe
 Example Usage:
 
 ```ts
-import { getMarkdownNet, Settings, getDefaultSettings } from 'markdown-net';
+import { getMarkdownNet, Settings, getDefaultSettings } from 'markdown_net';
 
 const settings: Settings = {
   // By default, index.md files will get mapped to their parent directory instead
