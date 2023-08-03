@@ -1,14 +1,13 @@
 import { getMarkdownContentWithMetadata } from "@engine/ingestor";
 import { processMarkdownContent } from "@engine/processor";
 import { ZodSchema } from "zod";
+
+export type JsonSchema = string;
+
 export interface Settings {
   webPathPrefix: string;
   entryFileName?: string;
-  directoryStructure?: DirectoryStructure;
-}
-
-export interface DirectoryStructure {
-  [key: string]: DirectoryStructure | Record<string, never>;
+  directoryStructure?: JsonSchema;
 }
 
 export interface ProcessedData<T = FrontMatterSchema> {

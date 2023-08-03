@@ -3,11 +3,8 @@ import { ensureNoDuplicatePaths } from "./validators/ensure_no_duplicate_paths";
 import { validateEntryFiles } from "./validators/validate_entry_files";
 import { validateFilePathNames } from "./validators/validate_file_path_names";
 import { ZodSchema } from "zod";
-import {
-  DirectoryStructure,
-  validateDirectoryStructure,
-} from "./validators/validate_directory_structure";
-import { FrontMatterSchema } from "src";
+import { validateDirectoryStructure } from "./validators/validate_directory_structure";
+import { FrontMatterSchema, JsonSchema } from "src";
 
 export interface ValidateFlags {
   entryFileName?: string;
@@ -16,7 +13,7 @@ export interface ValidateFlags {
 export const validateFilePaths = (
   filePaths: string[],
   settings: ValidateFlags,
-  directoryStructure?: DirectoryStructure,
+  directoryStructure?: JsonSchema,
 ): void => {
   // Cannot be disabled
   validateFilePathNames(filePaths);

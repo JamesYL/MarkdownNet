@@ -4,26 +4,52 @@ import { expect } from "chai";
 describe("processor - validate directory structure", () => {
   it("validateDirectoryStructure should not throw on match", () => {
     expect(() => {
-      validateDirectoryStructure(["test.md", "inner.md", "path/to/index.md"], {
-        "test.md": {},
-        "inner.md": {},
-        path: {
-          to: {
-            "index.md": {},
+      validateDirectoryStructure(
+        ["test.md", "inner.md", "path/to/index.md"],
+        JSON.stringify({
+          type: "object",
+          properties: {
+            "test.md": { type: "object" },
+            "inner.md": { type: "object" },
+            path: {
+              type: "object",
+              properties: {
+                to: {
+                  type: "object",
+                  properties: {
+                    "index.md": { type: "object" },
+                  },
+                },
+              },
+            },
           },
-        },
-      });
+        }),
+      );
     }).to.not.throw();
   });
   it("validateDirectoryStructure should throw on mismatch", () => {
     expect(() => {
-      validateDirectoryStructure(["test.md", "inner.md", "path/to/index.md"], {
-        "test.md": {},
-        "inner.md": {},
-        path: {
-          to: {},
-        },
-      });
+      validateDirectoryStructure(
+        ["test.md", "inner.md", "path/to/index.md"],
+        JSON.stringify({
+          type: "object",
+          properties: {
+            "test.md": { type: "object" },
+            "inner.md": { type: "object" },
+            path: {
+              type: "object",
+              properties: {
+                to: {
+                  type: "object",
+                  additionalProperties: false,
+                },
+              },
+              additionalProperties: false,
+            },
+          },
+          additionalProperties: false,
+        }),
+      );
     }).to.throw();
   });
 });

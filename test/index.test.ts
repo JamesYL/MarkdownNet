@@ -9,10 +9,18 @@ describe("Main entry point", () => {
   it("getMarkdownNet", () => {
     const settings: Settings = {
       ...getDefaultSettings(),
-      directoryStructure: {
-        "test.md": {},
-        "test2.md": {},
-      },
+      directoryStructure: JSON.stringify({
+        type: "object",
+        properties: {
+          "test.md": {
+            type: "object",
+          },
+          "test2.md": {
+            type: "object",
+          },
+        },
+        additionalProperties: false,
+      }),
     };
     createTmpDirectoryAndTest(async (tmpDir) => {
       fs.writeFileSync(

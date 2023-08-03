@@ -1,21 +1,10 @@
 import path from "path";
+import { JsonSchema } from "src";
+import Ajv from "ajv";
 
-export interface DirectoryStructure {
+interface DirectoryStructure {
   [key: string]: DirectoryStructure | Record<string, never>;
 }
-
-const deepEquals = (
-  obj1: DirectoryStructure,
-  obj2: DirectoryStructure,
-): boolean => {
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
-  if (keys1.length !== keys2.length) return false;
-
-  return !keys1.some(
-    (key) => !(key in obj2) || !deepEquals(obj1[key], obj2[key]),
-  );
-};
 
 const addFilePathToDirectoryObject = (
   directoryObject: DirectoryStructure,
@@ -32,13 +21,18 @@ const addFilePathToDirectoryObject = (
 
 export const validateDirectoryStructure = (
   filePaths: string[],
-  schema: DirectoryStructure,
+  schema: JsonSchema,
 ): void => {
   const directoryObject: DirectoryStructure = {};
-
   filePaths.forEach((filePath) =>
     addFilePathToDirectoryObject(directoryObject, filePath.split(path.sep)),
   );
-  if (!deepEquals(directoryObject, schema))
-    throw new Error("Directory structure does not match schema");
+  const ajv = new Ajv({ allErrors: true, verbose: true }); // options can be passed, e.g. {allErrors: true}
+
+  const validate = ajv.compile(JSON.parse(schema));
+  const valid = validate(directoryObject);
+  if (!valid)
+    throw new Error(
+      `JSON schema for directory structure failed: ${validate.errors}`,
+    );
 };
