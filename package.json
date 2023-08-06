@@ -4,11 +4,11 @@
     "type": "git",
     "url": "https://github.com/JamesYL/MarkdownNet"
   },
-  "version": "1.6.0",
+  "version": "1.5.0",
   "description": "Takes a nested directory of markdown files and outputs a single JSON representation of everything.",
   "author": "JamesYL",
   "license": "MIT",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "types": "src/index.d.ts",
   "dependencies": {
     "ajv": "^8.12.0",

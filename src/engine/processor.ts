@@ -1,10 +1,10 @@
-import { FrontMatterSchema } from "./../index";
+import { FrontMatterSchema } from "@home";
 import { MarkdownContentWithMetadata } from "@engine/ingestor";
 import { validateFilePaths, parseFrontMatter } from "./processor/validator";
 import { ZodSchema } from "zod";
 import { convertMarkdownPathsIntoWebPaths } from "./processor/transformer";
 import transformerGenerator from "./processor/transformers/all_directories_populated_transformer";
-import { ProcessedData, Settings } from "src";
+import { ProcessedData, Settings } from "@home";
 
 export const processMarkdownContent = <T = FrontMatterSchema>(
   content: MarkdownContentWithMetadata[],

@@ -18,13 +18,16 @@
       "node",
       "mocha"
     ],
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "paths": {
       "@platform/*": [
-        "src/platform/*"
+        "platform/*"
       ],
       "@engine/*": [
-        "src/engine/*"
+        "engine/*"
+      ],
+      "@home": [
+        "index.ts"
       ]
     }
   },

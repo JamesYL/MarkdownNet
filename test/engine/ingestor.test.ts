@@ -2,7 +2,7 @@ import { getMarkdownContentWithMetadata } from "@engine/ingestor";
 import { expect } from "chai";
 import { mkdirSync, statSync, writeFileSync } from "fs";
 import path from "path";
-import { createTmpDirectoryAndTest } from "test/helper";
+import { createTmpDirectoryAndTest } from "../helper";
 
 describe("ingestor", () => {
   it("All fields are retrieved correctly", async () => {
