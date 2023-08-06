@@ -14,7 +14,7 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "prettier",
   ],
-  ignorePatterns: ["**/*.js"],
+  ignorePatterns: ["**/*.js", "**/*.d.ts"],
   rules: {
     // Opinionated rules
     quotes: [2, "double"],
