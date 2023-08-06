@@ -8,7 +8,7 @@
   "description": "Takes a nested directory of markdown files and outputs a single JSON representation of everything.",
   "author": "JamesYL",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
   "types": "src/index.d.ts",
   "dependencies": {
     "ajv": "^8.12.0",
@@ -41,7 +41,7 @@
     "dev": "ts-node ./src/index.ts",
     "test": "mocha -r ts-node/register -r tsconfig-paths/register './test/**/*.test.ts'",
     "test:coverage": "nyc --reporter=text --report-dir ./coverage npm test",
-    "build": "rm -rf dist && tsc --stripInternal --project ./tsconfig.build.json",
+    "build": "rm -rf dist && tsc --project ./tsconfig.build.json",
     "lint:spell": "cspell .",
     "lint:eslint": "eslint './src/**/*.ts'",
     "lint": "npm run lint:spell && npm run lint:eslint",
