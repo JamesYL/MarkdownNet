@@ -33,6 +33,8 @@ export const validateDirectoryStructure = (
   const valid = validate(directoryObject);
   if (!valid)
     throw new Error(
-      `JSON schema for directory structure failed: ${validate.errors}`,
+      `JSON schema for directory structure failed: ${JSON.stringify(
+        validate.errors,
+      )}`,
     );
 };
