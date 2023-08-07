@@ -1,5 +1,5 @@
 import path from "path";
-import { JsonSchema } from "@home";
+import { JsonSchema } from "@home/index";
 import Ajv from "ajv";
 
 interface DirectoryStructure {

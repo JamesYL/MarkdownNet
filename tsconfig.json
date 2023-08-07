@@ -26,8 +26,8 @@
       "@engine/*": [
         "engine/*"
       ],
-      "@home": [
-        "index.ts"
+      "@home/*": [
+        "./*"
       ]
     }
   },

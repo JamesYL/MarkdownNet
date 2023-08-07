@@ -1,7 +1,7 @@
 import { MarkdownContentWithMetadata } from "@engine/ingestor";
 import { processMarkdownContent } from "@engine/processor";
 import { expect } from "chai";
-import { JsonSchema } from "@home";
+import { JsonSchema } from "@home/index";
 import { z } from "zod";
 const content: MarkdownContentWithMetadata[] = [
   {
