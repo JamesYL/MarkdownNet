@@ -1,7 +1,7 @@
 import { MarkdownContentWithMetadata } from "@engine/ingestor";
 import { processMarkdownContent } from "@engine/processor";
 import { expect } from "chai";
-import { JsonSchema } from "@home/index";
+import { JsonSchema } from "@home/index.d";
 import { z } from "zod";
 const content: MarkdownContentWithMetadata[] = [
   {
@@ -30,7 +30,7 @@ const directorySchema: JsonSchema = JSON.stringify({
   additionalProperties: false,
 });
 const settings = {
-  entryFileName: "index.md",
+  entryFile: { name: "index.md", enforceDirectoryStructure: true },
   webPathPrefix: "prefix",
   directorySchema,
 };

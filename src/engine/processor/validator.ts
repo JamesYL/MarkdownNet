@@ -4,7 +4,7 @@ import { validateEntryFiles } from "./validators/validate_entry_files";
 import { validateFilePathNames } from "./validators/validate_file_path_names";
 import { ZodSchema } from "zod";
 import { validateDirectoryStructure } from "./validators/validate_directory_structure";
-import { FrontMatterSchema, JsonSchema } from "@home/index";
+import { FrontMatterSchema, JsonSchema } from "@home/index.d";
 
 export interface ValidateFlags {
   entryFileName?: string;

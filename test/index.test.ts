@@ -1,6 +1,7 @@
-import { getDefaultSettings } from "./../src/index";
+import { getDefaultSettings } from "@home/index";
 import fs from "fs";
-import { Settings, getMarkdownNet } from "@home/index";
+import type { Settings } from "@home/index.d";
+import { getMarkdownNet } from "@home/index";
 import { createTmpDirectoryAndTest } from "./helper";
 import path from "path";
 import { z } from "zod";

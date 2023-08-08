@@ -1,31 +1,18 @@
+import type { FrontMatterSchema, Settings, ProcessedData } from "./index.d";
 import { getMarkdownContentWithMetadata } from "@engine/ingestor";
 import { processMarkdownContent } from "@engine/processor";
 import { ZodSchema } from "zod";
 
-export type JsonSchema = string;
-
-export interface Settings {
-  webPathPrefix: string;
-  entryFileName?: string;
-  directoryStructure?: JsonSchema;
-}
-
-export interface ProcessedData<T = FrontMatterSchema> {
-  parsedFrontMatter: T;
-  markdownWithWebPaths: string;
-  fileLastModified: Date;
-  relativeFilePath: string;
-}
-
 export const getDefaultSettings = (): Settings => {
   const defaultSettings: Settings = {
     webPathPrefix: "",
-    entryFileName: "index.md",
+    entryFile: {
+      name: "index.md",
+      enforceDirectoryStructure: false,
+    },
   };
   return defaultSettings;
 };
-
-export type FrontMatterSchema = Record<string, string | number>;
 
 /**
  * @param directory An entry directory that contains all the markdown files
