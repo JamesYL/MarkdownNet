@@ -1,7 +1,7 @@
 import { MarkdownContentWithMetadata } from "@engine/ingestor";
 import { processMarkdownContent } from "@engine/processor";
 import { expect } from "chai";
-import { JsonSchema } from "@home/index.d";
+import { JsonSchema, Settings } from "@home/index.d";
 import { z } from "zod";
 const content: MarkdownContentWithMetadata[] = [
   {
@@ -17,7 +17,7 @@ const content: MarkdownContentWithMetadata[] = [
     relativeFilePath: "world.md",
   },
 ];
-const directorySchema: JsonSchema = JSON.stringify({
+const directoryStructure: JsonSchema = JSON.stringify({
   type: "object",
   properties: {
     "index.md": {
@@ -29,10 +29,10 @@ const directorySchema: JsonSchema = JSON.stringify({
   },
   additionalProperties: false,
 });
-const settings = {
+const settings: Settings = {
   entryFile: { name: "index.md", enforceDirectoryStructure: true },
   webPathPrefix: "prefix",
-  directorySchema,
+  directoryStructure,
 };
 
 type FrontMatterSchema = {

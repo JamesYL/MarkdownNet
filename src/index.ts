@@ -10,6 +10,11 @@ export const getDefaultSettings = (): Settings => {
       name: "index.md",
       enforceDirectoryStructure: false,
     },
+    directoryStructure: JSON.stringify({
+      $schema: "http://json-schema.org/draft-07/schema#",
+      type: "object",
+      additionalProperties: false,
+    }),
   };
   return defaultSettings;
 };

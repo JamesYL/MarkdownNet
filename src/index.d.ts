@@ -27,7 +27,7 @@ export interface Settings {
    * If defined, it enforces the file structure.
    * Each property in the JsonSchema should either be a dictionary of items, or an empty dictionary.
    */
-  directoryStructure?: JsonSchema;
+  directoryStructure: JsonSchema;
 }
 
 export type FrontMatterSchema = Record<string, string | number>;
