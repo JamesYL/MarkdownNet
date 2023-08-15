@@ -55,6 +55,6 @@ export function getDefaultSettings(): Settings;
  */
 export function getMarkdownNet<T = FrontMatterSchema>(
   directory: string,
-  frontMatterSchema: ZodSchema<T>,
+  frontMatterSchema: ZodSchema,
   settings?: Settings,
 ): ProcessedData<T>[];
