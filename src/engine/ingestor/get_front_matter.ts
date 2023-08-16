@@ -8,12 +8,13 @@ const verifyFieldNameConvention = (field: string): void => {
     );
 };
 const verifyFieldValueConvention = (rawFieldValue: string): void => {
-  const fieldValue = rawFieldValue.trim();
+  const fieldValue = rawFieldValue.trimEnd();
   if (fieldValue !== rawFieldValue)
     throw new Error(
-      "Field value must not have leading or trailing whitespace. " +
+      "Field value must not have leading whitespace. " +
         `Field values: >>>${rawFieldValue}<<<`,
     );
+  if (fieldValue === "") throw new Error("Field value must not be empty");
 };
 
 export type FrontMatter = Record<string, string>;
@@ -37,7 +38,7 @@ export const getFrontMatter = (rawContent: string): FrontMatter => {
     if (index === -1)
       throw new Error(`Front matter line missing colon: >>>${line}<<<`);
     const fieldName = line.slice(0, index);
-    const fieldValue = line.slice(index + 1);
+    const fieldValue = line.slice(index + 1).trimStart();
 
     verifyFieldNameConvention(fieldName);
     verifyFieldValueConvention(fieldValue);

@@ -8,7 +8,7 @@ describe("ingestor - get_front_matter", () => {
     const frontMatter = getFrontMatter(
       `
 ---
-title:thing1
+title: thing1
 desc_example:${validValue}
 ---
 # Thing
@@ -20,7 +20,6 @@ desc_example:${validValue}
 
   it("Malformed front matter throws error", () => {
     const badFrontMatter = [
-      "space : thing",
       "space:thing ",
       " space:thing",
       "space space:thing",
