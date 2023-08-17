@@ -28,6 +28,7 @@ export interface Settings {
    * Each property in the JsonSchema should either be a dictionary of items, or an empty dictionary.
    */
   directoryStructure: JsonSchema;
+  environmentVariables: Record<string, string>;
 }
 
 export type FrontMatterSchema = Record<string, string | number>;

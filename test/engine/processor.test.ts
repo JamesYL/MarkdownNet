@@ -33,6 +33,7 @@ const settings: Settings = {
   entryFile: { name: "index.md", enforceDirectoryStructure: true },
   webPathPrefix: "prefix",
   directoryStructure,
+  environmentVariables: {},
 };
 
 type FrontMatterSchema = {

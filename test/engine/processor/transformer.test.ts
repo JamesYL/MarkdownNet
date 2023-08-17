@@ -29,6 +29,7 @@ describe("processor - transform_markdown_paths", () => {
             newWebPathPrefix,
             allFilePaths,
             transformer,
+            {},
           );
           expect(result).to.equal(expected);
         });
@@ -74,6 +75,7 @@ describe("processor - transform_markdown_paths", () => {
         webPathPrefix,
         allFilePaths,
         transformer,
+        {},
       ),
     ).to.throw();
   });
@@ -108,5 +110,20 @@ describe("processor - transform_markdown_paths", () => {
       webPathPrefix,
       expected,
     );
+  });
+
+  it("Environment variable is replaced", () => {
+    const content = "This is a [test1]($test)";
+    const relativeMarkdownFilePath = "path/to/file.md";
+    const webPathPrefix = "user";
+    const res = convertMarkdownPathsIntoWebPaths(
+      content,
+      relativeMarkdownFilePath,
+      webPathPrefix,
+      allFilePaths,
+      transformer,
+      { test: "lol" },
+    );
+    expect(res).to.equal("This is a [test1](lol)");
   });
 });

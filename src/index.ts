@@ -15,6 +15,7 @@ export const getDefaultSettings = (): Settings => {
       type: "object",
       additionalProperties: false,
     }),
+    environmentVariables: {},
   };
   return defaultSettings;
 };

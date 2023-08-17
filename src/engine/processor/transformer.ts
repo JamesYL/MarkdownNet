@@ -32,11 +32,19 @@ export const convertMarkdownPathsIntoWebPaths = (
   webPathPrefix: string,
   allFilePaths: Set<string>,
   transformer: Transformer,
+  environmentVariables: Record<string, string>,
 ): string => {
   const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
   return markdownContent.replace(
     linkRegex,
     (fullMatch: string, title: string, matchedPath: string) => {
+      if (matchedPath.startsWith("$")) {
+        const matchedPathWithoutDollarSign = matchedPath.slice(1);
+        if (matchedPathWithoutDollarSign in environmentVariables)
+          return `[${title}](${environmentVariables[matchedPathWithoutDollarSign]})`;
+        throw new Error(`Environment variable not found: ${matchedPath}`);
+      }
+
       if (isWebPath(matchedPath)) return fullMatch;
       if (!isLocalPath(matchedPath))
         throw new Error(

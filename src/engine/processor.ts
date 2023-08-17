@@ -35,6 +35,7 @@ export const processMarkdownContent = <T = FrontMatterSchema>(
         settings.webPathPrefix,
         filePathSet,
         transformerGenerator(settings.entryFile.name),
+        settings.environmentVariables,
       );
       const res: ProcessedData<T> = {
         parsedFrontMatter,
