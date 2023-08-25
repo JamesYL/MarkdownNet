@@ -6,7 +6,8 @@ const isWebPath = (filePath: string): boolean => {
     filePath.startsWith("http://") ||
     filePath.startsWith("https://") ||
     filePath.startsWith("www.") ||
-    filePath.startsWith("mailto:")
+    filePath.startsWith("mailto:") ||
+    filePath.startsWith("tel:")
   );
 };
 

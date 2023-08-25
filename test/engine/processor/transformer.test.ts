@@ -88,6 +88,7 @@ describe("processor - transform_markdown_paths", () => {
       "This is a [test](http://www.google.com)",
       "This is a [test](https://www.google.com)",
       "This is a [test](mailto:someone@google.com)",
+      "This is a [test](tel:123-123-1231)",
     ].forEach((content) => {
       const expected = content;
       testSlashPermutations(
