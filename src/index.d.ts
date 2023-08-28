@@ -57,3 +57,9 @@ export interface MarkdownNetItem<T = FrontMatter> {
 export interface NestedMarkdownNet<T = FrontMatter> {
   [key: string]: NestedMarkdownNet | MarkdownNetItem<T>;
 }
+
+export class MarkdownNet<T = FrontMatter> {
+  constructor(settings: Settings<T>);
+  getFlatten(): MarkdownNetItem<T>[];
+  getNested(): NestedMarkdownNet<T>;
+}
