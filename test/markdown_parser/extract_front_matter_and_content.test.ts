@@ -42,22 +42,25 @@ describe("extract_front_matter_and_content", () => {
     ).to.throw();
   });
 
+  it("Missing frontmatter colon throws", () => {
+    expect(() =>
+      extractFrontMatterAndContent(
+        `---
+      title: thing
+      desc: something here
+      desc something here
+      ---`,
+        simpleSchema,
+      ),
+    ).to.throw();
+  });
+
   it("Throws when doesn't follow schema", () => {
     expect(() =>
       extractFrontMatterAndContent(
         `---
       title: thing1
       desc: something here
-      ---`,
-        simpleSchema,
-      ),
-    ).to.throw();
-    expect(() =>
-      extractFrontMatterAndContent(
-        `---
-      title: thing
-      desc: something here
-      another: something here
       ---`,
         simpleSchema,
       ),

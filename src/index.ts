@@ -33,7 +33,7 @@ export class MarkdownNet<T = FrontMatter> {
         frontMatter: parsedMarkdown.frontMatter,
         markdownContent: parsedMarkdown.markdownContent,
         filePath: item.filePath,
-        updatedData: item.updatedDate,
+        updatedDate: item.updatedDate,
       };
     });
     return combinedData;

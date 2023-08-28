@@ -1,6 +1,6 @@
 import type { FrontMatter, FrontMatterSchema } from "@home/index.d";
 
-const frontMatterRegex = /^[\s\n]*---\s*\n([\s\S]+)\n\s*---\s*[\n|$]/;
+const frontMatterRegex = /^[\s\n]*---\s*\n([\s\S]+)\n\s*---/;
 
 const getFrontMatter = (rawMarkdownContent: string): FrontMatter => {
   const match = rawMarkdownContent.match(frontMatterRegex);

@@ -51,7 +51,7 @@ export interface MarkdownNetItem<T = FrontMatter> {
   frontMatter: T;
   markdownContent: string;
   filePath: string;
-  updatedData: Date;
+  updatedDate: Date;
 }
 
 export interface NestedMarkdownNet<T = FrontMatter> {

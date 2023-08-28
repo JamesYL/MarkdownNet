@@ -18,11 +18,10 @@ export class DirectoryParser<T = FrontMatter> {
     const results = fileContent.map((content) => {
       const relativeFilePath = path.relative(
         this.entryDirectory,
-        content.fileContent,
+        content.filePath,
       );
       return { ...content, filePath: relativeFilePath };
     });
-
     validateFilePaths(
       results.map((result) => result.filePath),
       this.settings,
