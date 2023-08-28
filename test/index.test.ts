@@ -42,6 +42,16 @@ const createFiles = (tmpDir: string): MarkdownNet => {
 };
 
 describe("index", () => {
+  it("Invalid settings", async () => {
+    const settings = getSettings();
+    expect(
+      () =>
+        new MarkdownNet({
+          ...settings,
+          environmentVariables: { "  asdflkjf   ": "asdf" },
+        }),
+    ).to.throw();
+  });
   it("getFlatten", async () => {
     await createTmpDirectoryAndTest(async (tmpDir) => {
       const res = createFiles(tmpDir).getFlatten();

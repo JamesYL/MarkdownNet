@@ -12,6 +12,12 @@ export class MarkdownNet<T = FrontMatter> {
   private settings: Settings<T>;
 
   constructor(settings: Settings<T>) {
+    Object.keys(settings.environmentVariables).forEach((key) => {
+      if (key.trim() !== key)
+        throw new Error(
+          `Environment variable key has whitespace: >>>${key}<<<`,
+        );
+    });
     this.settings = settings;
   }
 
