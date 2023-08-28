@@ -5,7 +5,7 @@ import { writeFileSync, mkdirSync, statSync } from "fs";
 import path from "path";
 import { createTmpDirectoryAndTest } from "../helper";
 
-describe("ingestor - get_file_content", () => {
+describe("get_file_content", () => {
   it("Valid markdown files in nested directories are detected", async () => {
     await createTmpDirectoryAndTest(async (tmpDir) => {
       const nestedDirPath = path.join(tmpDir, "nested");

@@ -15,6 +15,7 @@ const validateDirectoryStructure = (
   ): void => {
     let currentDir = directoryObject;
     filePathParts.forEach((part) => {
+      if (part === ".") return;
       if (!currentDir[part]) {
         currentDir[part] = {};
       }

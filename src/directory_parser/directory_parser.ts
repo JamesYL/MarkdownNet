@@ -1,7 +1,7 @@
 import type { FrontMatter, Settings } from "@home/index.d";
 import { getFileContentInDirectory } from "./get_file_content";
 import path from "path";
-import { validateFilePaths } from "./validator";
+import { validateFilePaths } from "./validate_file_paths";
 import type { RawFileInfo } from "@home/index.d";
 
 export class DirectoryParser<T = FrontMatter> {
