@@ -46,9 +46,9 @@
     "lint:eslint": "eslint './src/**/*.ts' --fix",
     "lint": "npm run lint:spell && npm run lint:eslint",
     "prepare": "husky install",
-    "publish:major": "npm version major && npm run build && npm run lint && npm test && npm publish",
-    "publish:minor": "npm version minor && npm run build && npm run lint && npm test && npm publish",
-    "publish:patch": "npm version patch && npm run build && npm run lint && npm test && npm publish"
+    "publish:major": "npm run build && npm run lint && npm test && npm version major && npm publish",
+    "publish:minor": "npm run build && npm run lint && npm test && npm version minor && npm publish",
+    "publish:patch": "npm run build && npm run lint && npm test && npm version patch && npm publish"
   },
   "prettier": {
     "semi": true,
