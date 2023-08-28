@@ -1,8 +1,9 @@
 import { expect } from "chai";
-import { getFileContentInDirectory } from "@engine/ingestor/get_file_content";
+import { getFileContentInDirectory } from "@parser/get_file_content";
+
 import { writeFileSync, mkdirSync, statSync } from "fs";
 import path from "path";
-import { createTmpDirectoryAndTest } from "../../helper";
+import { createTmpDirectoryAndTest } from "../helper";
 
 describe("ingestor - get_file_content", () => {
   it("Valid markdown files in nested directories are detected", async () => {
@@ -22,7 +23,7 @@ describe("ingestor - get_file_content", () => {
 
       result.forEach((content, i) => {
         const file = statSync(filePaths[i]);
-        expect(content.absoluteFilePath).to.equal(filePaths[i]);
+        expect(content.filePath).to.equal(filePaths[i]);
         expect(content.fileContent).to.equal(fileData + i);
         expect(content.createdDate.toString()).to.equal(
           file.birthtime.toString(),

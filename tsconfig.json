@@ -20,14 +20,12 @@
     ],
     "baseUrl": "./src",
     "paths": {
-      "@platform/*": [
-        "platform/*"
-      ],
-      "@engine/*": [
-        "engine/*"
+      "@parser/*": [
+        "directory_parser/*",
+        "markdown_parser/*"
       ],
       "@home/*": [
-        "./*"
+        "./index.d.ts"
       ]
     }
   },

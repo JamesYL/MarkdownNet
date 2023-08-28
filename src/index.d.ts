@@ -1,61 +1,59 @@
 import type { ZodSchema } from "zod";
 
 export type JsonSchema = string;
-export type FrontMatterSchema = Record<string, string | number>;
-
-export interface Settings {
+export type FrontMatter = Record<string, string | number>;
+export type FrontMatterSchema<T = FrontMatter> = ZodSchema<T>;
+export type EnvironmentVariables = Record<string, string>;
+export type UriTransformer = (
+  matchedUri: string,
+  matchedContent: string,
+  markdownFilePath: string,
+  markdownFileContent: string,
+) => {
+  transformedUri: string;
+  transformedContent: string;
+} | null;
+export interface RawFileInfo {
+  fileContent: string;
+  filePath: string;
+  createdDate: Date;
+  updatedDate: Date;
+}
+export interface ParsedMarkdown<T = FrontMatter> {
+  frontMatter: T;
+  markdownContent: string;
+}
+export interface Settings<T = FrontMatter> {
+  /**
+   * Enforces the file structure of the markdown files.
+   * Each property in the JsonSchema should either be a dictionary of items, or an empty dictionary.
+   * An empty dictionary means it's a file. Otherwise, it's a directory.
+   */
+  directoryStructure: JsonSchema;
+  /**
+   * Enforces front matter fields to follow the schema.
+   */
+  frontMatterSchema: FrontMatterSchema<T>;
+  /**
+   * Replaces all instances of $ENV_VAR_NAME_GOES_HERE with the mapped value in any of the links.
+   */
+  environmentVariables: EnvironmentVariables;
   /**
    * This appends to each local path referenced in the markdown files.
    */
   webPathPrefix: string;
   /**
-   * This is related to mapping a specific file in a directory to represent the directory. For example, something like index.md.
-   * If the name is defined, then the paths in the markdown file will route to the parent directory when the name is matched.
+   * The directory where the markdown files are located.
    */
-  entryFile: {
-    /**
-     * A file name to represent the directory, such as `index.md`.
-     * If no file is wanted, then use the empty string.
-     */
-    name: string;
-    /**
-     * Enforces every directory has the entry file.
-     */
-    enforceDirectoryStructure: boolean;
-  };
-  /**
-   * If defined, it enforces the file structure.
-   * Each property in the JsonSchema should either be a dictionary of items, or an empty dictionary.
-   */
-  directoryStructure: JsonSchema;
-  environmentVariables: Record<string, string>;
+  entryDirectory: string;
+}
+export interface MarkdownNetItem<T = FrontMatter> {
+  frontMatter: T;
+  markdownContent: string;
+  filePath: string;
+  updatedData: Date;
 }
 
-export type FrontMatterSchema = Record<string, string | number>;
-
-export interface ProcessedData<T = FrontMatterSchema> {
-  parsedFrontMatter: T;
-  markdownWithWebPaths: string;
-  fileLastModified: Date;
-  relativeFilePath: string;
+export interface NestedMarkdownNet<T = FrontMatter> {
+  [key: string]: NestedMarkdownNet | MarkdownNetItem<T>;
 }
-
-export interface ProcessedData<T = FrontMatterSchema> {
-  parsedFrontMatter: T;
-  markdownWithWebPaths: string;
-  fileLastModified: Date;
-  relativeFilePath: string;
-}
-
-export function getDefaultSettings(): Settings;
-
-/**
- * @param directory An entry directory that contains all the markdown files
- * @param frontMatterSchema A zod schema that defines what front matter the markdown files should have
- * @param settings Optional configuration
- */
-export function getMarkdownNet<T = FrontMatterSchema>(
-  directory: string,
-  frontMatterSchema: ZodSchema,
-  settings?: Settings,
-): ProcessedData<T>[];
